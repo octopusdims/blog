@@ -1,0 +1,46 @@
+<header class="header" data-glass-nav data-liquid-glass="header">
+  <div class="header-inner">
+    <a href="/" class="logo">
+      <span class="logo-text">{{ .Site.Params.suffix | default .Site.Title }}</span>
+    </a>
+    
+    <nav class="nav">
+      {{ range .Site.Menus.main }}
+        <a href="{{ .URL }}" class="nav-link{{ if $.IsMenuCurrent "main" . }} active{{ end }}{{ if $.HasMenuCurrent "main" . }} active{{ end }}">
+          {{ .Name }}
+        </a>
+      {{ end }}
+    </nav>
+    
+    <div class="header-actions">
+      <!-- Search Button -->
+      <button class="icon-btn search-toggle" aria-label="Search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="m21 21-4.35-4.35"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Search Modal -->
+<div class="search-modal" id="searchModal">
+  <div class="search-container">
+    <div class="search-box">
+      <input type="text" class="search-input" id="searchInput" placeholder="搜索文章..." autocomplete="off">
+      <button class="icon-btn search-close" id="searchClose" aria-label="Close search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+    <div class="search-results" id="searchResults"></div>
+    <div class="search-footer">
+      <span class="search-hint">按 <kbd>ESC</kbd> 关闭</span>
+      <span class="search-hint"><kbd>↑</kbd> <kbd>↓</kbd> 选择</span>
+      <span class="search-hint"><kbd>Enter</kbd> 打开</span>
+    </div>
+  </div>
+</div>

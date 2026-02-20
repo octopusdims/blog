@@ -1,0 +1,79 @@
+{{ define "main" }}
+<section class="hero">
+  <!-- 动态背景网格 -->
+  <div class="hero-bg-grid"></div>
+  <!-- 粒子画布 -->
+  <canvas class="hero-particles" id="particleCanvas"></canvas>
+  
+  <div class="hero-content">
+    <div class="hero-icon kaomoji octopus">
+  <span class="octopus-head">Ｃ:</span><span class="octopus-tentacle t1">。</span><span class="octopus-tentacle t2">ミ</span>
+</div>
+    <h1 class="hero-title">
+      <div class="hero-title-glass-wrapper" data-liquid-glass="hero-title">
+        <span class="hero-title-glow">{{ .Site.Params.about.name | default .Site.Title }}</span>
+      </div>
+    </h1>
+    <p class="hero-subtitle">{{ .Site.Params.about.description | default "记录技术、生活与灵感" }}</p>
+    
+    <!-- 滚动提示 - 可爱圆润箭头 -->
+    <div class="scroll-hint">
+      <svg class="scroll-arrow-cute" viewBox="0 0 40 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- 圆润箭头主体 -->
+        <path class="arrow-body" d="M20 4C20 4 20 32 20 32C20 32 8 20 8 20" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+        <path class="arrow-body" d="M20 32C20 32 32 20 32 20" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- 小尾巴装饰 -->
+        <circle class="arrow-tail" cx="20" cy="40" r="3" fill="currentColor"/>
+        <circle class="arrow-tail" cx="12" cy="36" r="2" fill="currentColor"/>
+        <circle class="arrow-tail" cx="28" cy="36" r="2" fill="currentColor"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="posts-section">
+  <div class="container">
+    <div class="posts-grid" id="glassCardLayer">
+      {{ $paginator := .Paginate (where .Site.RegularPages "Type" "posts") .Site.Params.posts.per_page }}
+      {{ range $index, $post := $paginator.Pages }}
+        <article class="post-card" data-glass-card data-liquid-glass="card" data-card-index="{{ $index }}">
+          <a href="{{ $post.RelPermalink }}" class="post-card-link">
+            <div class="post-card-image">
+              {{ $cover := $post.Params.cover | default $post.Params.feature | default "images/default-cover.jpg" }}
+              <img src="{{ $cover | relURL }}" alt="{{ $post.Title }}" loading="lazy">
+            </div>
+            <div class="post-card-content">
+              <div class="post-card-meta">
+                <time class="post-date" datetime="{{ $post.Date.Format "2006-01-02T15:04:05Z07:00" }}">{{ $post.Date.Format "2006.01.02" }}</time>
+                {{ with $post.Params.categories }}
+                  {{ range first 1 . }}
+                    <span class="post-category">{{ . }}</span>
+                  {{ end }}
+                {{ end }}
+              </div>
+              <h2 class="post-card-title">{{ $post.Title }}</h2>
+              {{ if $post.Params.description }}
+                <p class="post-card-excerpt">{{ $post.Params.description }}</p>
+              {{ else }}
+                <p class="post-card-excerpt">{{ $post.Summary | plainify | truncate 120 }}</p>
+              {{ end }}
+            </div>
+          </a>
+        </article>
+      {{ end }}
+    </div>
+    
+    {{ if gt $paginator.TotalPages 1 }}
+      <nav class="pagination">
+        {{ if $paginator.HasPrev }}
+          <a href="{{ $paginator.Prev.URL }}" class="pagination-prev">← 上一页</a>
+        {{ end }}
+        <span class="pagination-info">{{ $paginator.PageNumber }} / {{ $paginator.TotalPages }}</span>
+        {{ if $paginator.HasNext }}
+          <a href="{{ $paginator.Next.URL }}" class="pagination-next">下一页 →</a>
+        {{ end }}
+      </nav>
+    {{ end }}
+  </div>
+</section>
+{{ end }}

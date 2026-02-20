@@ -1,0 +1,80 @@
+/* Tabs Plugin Styles - Liquid Glass Edition */
+.tabs {
+  margin: var(--space-2xl) 0;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--glass-shadow);
+}
+
+.nav-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.03);
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: var(--space-sm);
+  gap: var(--space-xs);
+}
+
+.nav-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.nav-tabs .tab {
+  padding: var(--space-md) var(--space-xl);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+}
+
+.nav-tabs .tab:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.nav-tabs .tab.active {
+  color: white;
+  background: var(--accent-gradient);
+  box-shadow: var(--shadow-sm);
+}
+
+.tab-contents {
+  padding: var(--space-xl);
+}
+
+.tab-item-content {
+  display: none;
+}
+
+.tab-item-content.active {
+  display: block;
+  animation: fadeIn var(--transition-normal);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tab-item-content > *:first-child {
+  margin-top: 0;
+}
+
+.tab-item-content > *:last-child {
+  margin-bottom: 0;
+}

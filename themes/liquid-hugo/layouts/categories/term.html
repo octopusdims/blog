@@ -1,0 +1,47 @@
+{{ define "main" }}
+<div class="page-category">
+  <div class="container">
+    <header class="page-header">
+      <div class="category-term-glass" data-liquid-glass="term-title" style="-webkit-mask-image: url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 80'%3E%3Ctext x='50%25' y='60%25' dominant-baseline='middle' text-anchor='middle' font-size='56' font-weight='800' font-family='Inter, system-ui, -apple-system, sans-serif' fill='white' style='letter-spacing: -0.03em;'%3E{{ .Title }}%3C/text%3E%3C/svg%3E&quot;); mask-image: url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 80'%3E%3Ctext x='50%25' y='60%25' dominant-baseline='middle' text-anchor='middle' font-size='56' font-weight='800' font-family='Inter, system-ui, -apple-system, sans-serif' fill='white' style='letter-spacing: -0.03em;'%3E{{ .Title }}%3C/text%3E%3C/svg%3E&quot;);">
+        <h1 class="page-title">{{ .Title }}</h1>
+      </div>
+      <p class="page-subtitle">共 {{ len .Pages }} 篇文章</p>
+    </header>
+    
+    <div class="posts-list">
+      {{ range .Pages }}
+        <article class="post-item" data-href="{{ .RelPermalink }}">
+          <time class="post-item-date" datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">{{ .Date.Format "2006.01.02" }}</time>
+          <h2 class="post-item-title">{{ .Title }}</h2>
+          {{ if .Params.description }}
+            <p class="post-item-excerpt">{{ .Params.description }}</p>
+          {{ end }}
+          {{ with .GetTerms "tags" }}
+            <div class="post-item-tags">
+              {{ range . }}
+                <a href="{{ .RelPermalink }}" class="post-tag">#{{ .Title }}</a>
+              {{ end }}
+            </div>
+          {{ end }}
+        </article>
+      {{ end }}
+    </div>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll('.post-item').forEach(function(item) {
+    item.addEventListener('click', function(e) {
+      // 如果点击的是标签链接，不跳转
+      if (e.target.closest('.post-tag')) {
+        return;
+      }
+      var href = this.getAttribute('data-href');
+      if (href) {
+        window.location.href = href;
+      }
+    });
+    item.style.cursor = 'pointer';
+  });
+</script>
+{{ end }}

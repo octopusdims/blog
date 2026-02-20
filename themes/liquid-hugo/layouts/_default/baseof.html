@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.Language.Lang | default "zh-CN" }}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ if .Title }}{{ .Title }} | {{ end }}{{ .Site.Params.suffix | default .Site.Title }}</title>
+  
+  {{/* SEO Meta Tags */}}
+  <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ with .Site.Params.description }}{{ . }}{{ else }}{{ .Summary | plainify | truncate 160 }}{{ end }}{{ end }}">
+  <meta name="author" content="{{ .Site.Params.author }}">
+  {{ with .Params.keywords }}<meta name="keywords" content="{{ delimit . ", " }}">{{ end }}
+  
+  {{/* Open Graph */}}
+  {{ template "_internal/opengraph.html" . }}
+  
+  {{/* Twitter Card */}}
+  {{ template "_internal/twitter_cards.html" . }}
+  
+  <!-- Force Dark Mode -->
+  <script>
+    (function() {
+      // Always use dark mode
+      document.documentElement.classList.add('dark');
+      localStorage.theme = 'dark';
+    })();
+  </script>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="{{ "images/favicon.ico" | relURL }}">
+  
+  <!-- Styles -->
+  {{ $css := resources.Get "css/index.scss" | css.Sass | resources.Minify }}
+  <link rel="stylesheet" href="{{ $css.RelPermalink }}">
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  
+  {{ if .Site.Params.katex.enable }}
+    <!-- KaTeX -->
+    <link rel="stylesheet" href="{{ .Site.Params.katex.cdn }}katex.min.css">
+    <script defer src="{{ .Site.Params.katex.cdn }}katex.min.js"></script>
+    <script defer src="{{ .Site.Params.katex.cdn }}contrib/auto-render.min.js"></script>
+  {{ end }}
+</head>
+<body class="{{ if .IsHome }}is-home{{ end }}{{ if eq .Type "posts" }} is-post{{ end }}{{ if .Params.cover }} has-cover{{ end }}">
+  {{ partial "floating-shapes.html" . }}
+  {{ partial "header.html" . }}
+  
+  <main class="main">
+    <div class="layout layout-full">
+      <section class="content content-full">
+        {{ block "main" . }}{{ end }}
+      </section>
+    </div>
+  </main>
+  
+  {{ partial "footer.html" . }}
+  
+  <!-- Floating Action Button -->
+  <button class="fab-sidebar-toggle" id="fabSidebarToggle" aria-label="打开侧边栏">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <line x1="3" y1="12" x2="21" y2="12"/>
+      <line x1="3" y1="6" x2="21" y2="6"/>
+      <line x1="3" y1="18" x2="21" y2="18"/>
+    </svg>
+  </button>
+  
+  <!-- Sidebar Drawer -->
+  <div class="sidebar-drawer" id="sidebarDrawer">
+    <div class="sidebar-drawer-header">
+      <span class="sidebar-drawer-title">导航</span>
+      <button class="sidebar-drawer-close" id="sidebarDrawerClose" aria-label="关闭">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+    <div class="sidebar-drawer-content">
+      {{ partial "sidebar.html" . }}
+    </div>
+  </div>
+  
+  <!-- Sidebar Overlay -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+  
+  <!-- Scripts -->
+  {{ $snow := resources.Get "js/snow-ground.js" | resources.Minify }}
+  <script src="{{ $snow.RelPermalink }}"></script>
+  {{ $liquid := resources.Get "js/liquidGlass.js" | resources.Minify }}
+  <script src="{{ $liquid.RelPermalink }}"></script>
+  {{ $main := resources.Get "js/main.js" | resources.Minify }}
+  <script src="{{ $main.RelPermalink }}"></script>
+  
+  {{ if .Site.Params.katex.enable }}
+    <!-- KaTeX Auto-render -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        if (typeof renderMathInElement !== 'undefined') {
+          renderMathInElement(document.body, {
+            delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\[', right: '\\]', display: true},
+              {left: '\\(', right: '\\)', display: false}
+            ],
+            throwOnError: false
+          });
+        }
+      });
+    </script>
+  {{ end }}
+  
+  <!-- Music Player -->
+  {{ partial "meting.html" . }}
+</body>
+</html>

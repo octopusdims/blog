@@ -1,0 +1,19 @@
+<footer class="footer" data-liquid-glass="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-info">
+        <p class="copyright">
+          © {{ .Site.Params.footer.since }} - {{ now.Year }} {{ .Site.Params.footer.copyright }}
+        </p>
+        <p class="powered">
+          Powered by <a href="https://gohugo.io" target="_blank">Hugo</a> & Theme <a href="#">Liquid</a>
+        </p>
+      </div>
+      {{ if .Site.Params.footer.icp.enable }}
+        <div class="footer-icp">
+          <a href="{{ .Site.Params.footer.icp.link }}" target="_blank">{{ .Site.Params.footer.icp.text }}</a>
+        </div>
+      {{ end }}
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,31 @@
+{{ define "main" }}
+<div class="about-page">
+  <div class="container">
+    <div class="about-content">
+      <div class="about-profile">
+        <div class="about-avatar">
+          <img src="{{ .Site.Params.about.avatar | relURL }}" alt="{{ .Site.Params.about.name }}">
+        </div>
+        <div class="about-info">
+          <div class="about-icon kaomoji">(◍•ᴗ•◍)</div>
+          <div class="about-name-glass-wrapper" data-liquid-glass="about-name">
+            <h2 class="about-name">{{ .Site.Params.about.name }}</h2>
+          </div>
+          <p class="about-description">{{ .Site.Params.about.description }}</p>
+          <div class="about-social">
+            {{ range .Site.Params.about.social }}
+              <a href="{{ .link }}" class="social-link" target="_blank" rel="noopener">
+                {{ .name }}
+              </a>
+            {{ end }}
+          </div>
+        </div>
+      </div>
+      
+      <div class="about-body">
+        {{ .Content }}
+      </div>
+    </div>
+  </div>
+</div>
+{{ end }}

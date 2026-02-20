@@ -1,0 +1,543 @@
+// Liquid Theme - Smooth Liquid Glass Effect
+// Elegant glass lens distortion without ugly ripples
+
+(function() {
+  'use strict';
+
+  if (!document.documentElement.classList.contains('dark')) return;
+  if (!document.createElement('canvas').getContext('webgl2')) return;
+
+  function lerp(a, b, t) { return a + (b - a) * t; }
+
+  const vertexShader = `#version 300 es
+    precision highp float;
+    layout(location = 0) in vec2 a_position;
+    out vec2 v_uv;
+    out vec2 v_px;
+    uniform vec2 u_resolution;
+    void main() {
+      v_uv = a_position * 0.5 + 0.5;
+      v_px = v_uv * u_resolution;
+      gl_Position = vec4(a_position, 0.0, 1.0);
+    }
+  `;
+
+  const fragmentShader = `#version 300 es
+    precision highp float;
+    in vec2 v_uv;
+    in vec2 v_px;
+    out vec4 fragColor;
+    
+    uniform vec2 u_resolution;
+    uniform float u_time;
+    uniform vec2 u_mouse;
+    uniform vec2 u_mouseVel;
+    uniform float u_hover;
+    uniform vec3 u_baseColor;
+    uniform float u_cornerRadius;
+    
+    #define PI 3.14159
+    
+    vec3 mod289(vec3 x) { return x - floor(x * (1.0/289.0)) * 289.0; }
+    vec2 mod289(vec2 x) { return x - floor(x * (1.0/289.0)) * 289.0; }
+    vec3 permute(vec3 x) { return mod289(((x*34.0)+1.0)*x); }
+    
+    float snoise(vec2 v) {
+      const vec4 C = vec4(0.211324865405187, 0.366025403784439,
+                         -0.577350269189626, 0.024390243902439);
+      vec2 i = floor(v + dot(v, C.yy));
+      vec2 x0 = v - i + dot(i, C.xx);
+      vec2 i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+      vec4 x12 = x0.xyxy + C.xxzz;
+      x12.xy -= i1;
+      i = mod289(i);
+      vec3 p = permute(permute(i.y + vec3(0.0, i1.y, 1.0)) + i.x + vec3(0.0, i1.x, 1.0));
+      vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy), dot(x12.zw,x12.zw)), 0.0);
+      m = m*m; m = m*m;
+      vec3 x = 2.0 * fract(p * C.www) - 1.0;
+      vec3 h = abs(x) - 0.5;
+      vec3 ox = floor(x + 0.5);
+      vec3 a0 = x - ox;
+      m *= 1.79284291400159 - 0.85373472095314 * (a0*a0 + h*h);
+      vec3 g;
+      g.x = a0.x * x0.x + h.x * x0.y;
+      g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+      return 130.0 * dot(m, g);
+    }
+    
+    // Smooth lens distortion
+    vec2 lensDistort(vec2 p, vec2 center, float strength, float radius) {
+      vec2 delta = p - center;
+      float dist = length(delta);
+      float fac = smoothstep(radius, 0.0, dist) * strength;
+      // Smooth quadratic distortion
+      float distort = fac * (1.0 + dist * 0.001);
+      return delta * distort;
+    }
+    
+    // Smooth gradient noise
+    float smoothNoise(vec2 p) {
+      float n = snoise(p * 0.5) * 0.5;
+      n += snoise(p * 1.0) * 0.25;
+      n += snoise(p * 2.0) * 0.125;
+      return n;
+    }
+    
+    // Rounded rect SDF
+    float sdRoundRect(vec2 p, vec2 b, float r) {
+      vec2 d = abs(p) - b + vec2(r);
+      return min(max(d.x, d.y), 0.0) + length(max(d, 0.0)) - r;
+    }
+    
+    void main() {
+      vec2 px = v_px;
+      vec2 center = u_resolution * 0.5;
+      vec2 local = px - center;
+      
+      // Shape
+      vec2 halfSize = u_resolution * 0.5 - vec2(2.0);
+      float shapeDist = sdRoundRect(local, halfSize, u_cornerRadius);
+      float edgeDist = abs(shapeDist);
+      float shapeAlpha = 1.0 - smoothstep(-1.0, 1.0, shapeDist);
+      float edgeFactor = smoothstep(60.0, 0.0, edgeDist);
+      
+      float t = u_time * 0.3;
+      
+      // === REFINED MOUSE FLUID FLOW ===
+      vec2 mousePos = u_mouse * u_resolution;
+      
+      // Curl noise for natural fluid motion
+      vec2 uv = px * 0.003;
+      float n1 = snoise(uv + t * 0.1);
+      float n2 = snoise(uv * 1.5 + t * 0.08 + 100.0);
+      float n3 = snoise(uv * 0.5 - t * 0.05 + 200.0);
+      
+      // Curl from noise gradient
+      vec2 curl;
+      curl.x = n2 - n1;
+      curl.y = n3 - n2;
+      curl = normalize(curl + 0.001) * length(vec2(n1, n2)) * 40.0;
+      
+      // Slow organic undulation
+      vec2 slowUV = px * 0.001 + t * 0.03;
+      vec2 slowFlow = vec2(
+        snoise(slowUV + vec2(0.01, 0.0)) - snoise(slowUV - vec2(0.01, 0.0)),
+        snoise(slowUV + vec2(0.0, 0.01)) - snoise(slowUV - vec2(0.0, 0.01))
+      ) * 50.0;
+      
+      // === TEXTURE MODULATION ===
+      // Mouse modulation UV offset - texture pattern unchanged, position slightly shifted
+      vec2 toMouse = px - mousePos;
+      float mouseDist = length(toMouse);
+      vec2 mouseDir = normalize(toMouse + 0.001);
+      
+      // Get mouse velocity
+      vec2 mouseVelocity = u_mouseVel * u_resolution;
+      float mouseSpeed = length(mouseVelocity);
+      vec2 velDir = normalize(mouseVelocity + 0.001);
+      
+      float influenceRadius = 180.0;
+      float baseInfluence = smoothstep(influenceRadius, 0.0, mouseDist) * u_hover;
+      
+      // Velocity influence - use smooth curve to avoid linear abruptness
+      float speedFactor = smoothstep(0.0, 0.05, mouseSpeed) * min(mouseSpeed * 10.0, 1.0);
+      float influence = baseInfluence * (1.0 + speedFactor * 0.5);
+      
+      // Base organic disturbance (always present)
+      float timeFlow = t * 0.15;
+      vec2 organicOffset = vec2(
+        snoise(vec2(uv.x * 0.5 + timeFlow, uv.y * 0.3)),
+        snoise(vec2(uv.x * 0.3, uv.y * 0.5 + timeFlow))
+      ) * 0.3;
+      
+      // Trail effect - natural flow based on movement direction
+      vec2 trailOffset = vec2(0.0);
+      if (mouseSpeed > 0.001) {
+        // Calculate position relative to mouse movement path
+        float alongPath = dot(toMouse, velDir);
+        float acrossDist = length(toMouse - velDir * alongPath);
+        
+        // Trail area: rear fan-shaped region
+        float behindFactor = smoothstep(20.0, -80.0, alongPath); // behind
+        float widthFactor = smoothstep(120.0, 0.0, acrossDist);   // width
+        float trailInfluence = behindFactor * widthFactor * speedFactor;
+        
+        // Trail texture flow - use noise to create organic shapes
+        float trailPhase = acrossDist * 0.02 - alongPath * 0.01 - t * 1.5;
+        float trailWave = sin(trailPhase) * 0.5 + 0.5;
+        trailWave *= exp(-acrossDist * 0.008); // edge attenuation
+        
+        // Flow perpendicular to movement direction
+        vec2 perpDir = vec2(-velDir.y, velDir.x);
+        trailOffset = perpDir * trailWave * trailInfluence * 0.6;
+        trailOffset -= velDir * trailInfluence * 0.3; // slight backward drag
+      }
+      
+      // Combine offsets
+      vec2 uvOffset = (organicOffset + trailOffset) * influence;
+      
+      // Modulated UV for noise sampling (same texture pattern, position offset)
+      vec2 modulatedUV = uv + uvOffset;
+      vec2 modulatedSlowUV = slowUV + uvOffset * 0.5;
+      
+      // Recalculate curl (using modulated UV)
+      float nm1 = snoise(modulatedUV + t * 0.1);
+      float nm2 = snoise(modulatedUV * 1.5 + t * 0.08 + 100.0);
+      float nm3 = snoise(modulatedUV * 0.5 - t * 0.05 + 200.0);
+      
+      vec2 modulatedCurl;
+      modulatedCurl.x = nm2 - nm1;
+      modulatedCurl.y = nm3 - nm2;
+      modulatedCurl = normalize(modulatedCurl + 0.001) * length(vec2(nm1, nm2)) * 40.0;
+      
+      // Recalculate slowFlow (using modulated UV)
+      vec2 modulatedSlowFlow = vec2(
+        snoise(modulatedSlowUV + vec2(0.01, 0.0)) - snoise(modulatedSlowUV - vec2(0.01, 0.0)),
+        snoise(modulatedSlowUV + vec2(0.0, 0.01)) - snoise(modulatedSlowUV - vec2(0.0, 0.01))
+      ) * 50.0;
+      
+      // Combine effects - only use modulated textures
+      vec2 totalDistort = modulatedCurl * 0.3 + modulatedSlowFlow * 0.4;
+      
+      // === ORGANIC SURFACE ===
+      // Very slow surface undulation
+      vec2 surfUV = px * 0.002 + t * 0.02;
+      vec2 surfaceN;
+      surfaceN.x = snoise(surfUV + vec2(0.01, 0.0)) - snoise(surfUV - vec2(0.01, 0.0));
+      surfaceN.y = snoise(surfUV + vec2(0.0, 0.01)) - snoise(surfUV - vec2(0.0, 0.01));
+      surfaceN *= 0.5;
+      
+      // Total normal
+      vec2 normal = totalDistort * 0.006 + surfaceN;
+      
+      // === CHROMATIC REFRACTION ===
+      float caStrength = 0.8 * (edgeFactor + u_hover * 0.5);
+      
+      // Smooth RGB shift based on distortion
+      vec2 dir = normalize(normal + 0.001);
+      float mag = length(normal);
+      
+      // Base color with subtle distortion tint
+      vec3 base = u_baseColor;
+      
+      // === ORGANIC CHROMATIC DISPERSION ===
+      float shift = mag * 0.4;
+      vec3 color = base;
+      // Organic RGB shift
+      float flowR = snoise(dir * 2.0 + t * 0.2);
+      float flowG = snoise(dir * 2.0 + t * 0.15 + 100.0);
+      float flowB = snoise(dir * 2.0 + t * 0.25 + 200.0);
+      color.r += flowR * shift * 0.6;
+      color.g += flowG * shift * 0.25;
+      color.b += flowB * shift * 1.1;
+      
+      // Organic purple tint
+      float tintFlow = snoise(vec2(t * 0.1));
+      color += vec3(0.03, 0.02, 0.05) * mag * caStrength * (0.8 + tintFlow * 0.4);
+      
+      // === ORGANIC EDGE HIGHLIGHT ===
+      // Natural flowing edge glow
+      float edgeGlow = edgeFactor * 0.7;
+      float edgeFlow = snoise(vec2(atan(local.y, local.x) * 2.0, t * 0.3));
+      vec3 edgeColor = vec3(0.52, 0.56, 0.76); // Soft blue
+      edgeColor = mix(edgeColor, vec3(0.68, 0.52, 0.82), edgeFlow * 0.5 + 0.5); // Organic purple shift
+      // Subtle organic shimmer
+      float shimmer = snoise(vec2(edgeDist * 0.05, t * 0.5)) * 0.5 + 0.5;
+      color = mix(color, edgeColor * 0.25 + base, edgeGlow * 0.2 * shimmer);
+      
+      // === ORGANIC FRESNEL ===
+      vec3 viewDir = vec3(0.0, 0.0, 1.0);
+      vec3 surfNorm = normalize(vec3(normal * 2.0, 1.0));
+      float fresnel = pow(1.0 - abs(dot(viewDir, surfNorm)), 1.8);
+      fresnel *= edgeFactor * 0.7;
+      // Organic edge light variation
+      float flowFresnel = snoise(vec2(t * 0.2)) * 0.3 + 0.7;
+      color += vec3(0.76, 0.72, 0.90) * fresnel * 0.5 * flowFresnel;
+      
+      // === SOFT SPECULAR ===
+      vec3 lightDir = normalize(vec3(0.3, 0.5, 1.0));
+      vec3 halfV = normalize(lightDir + viewDir);
+      float spec = pow(max(dot(surfNorm, halfV), 0.0), 56.0);
+      spec *= (0.2 + u_hover * 0.35);
+      color += vec3(0.90, 0.85, 0.98) * spec; // Brighter purple-white specular
+      
+      // === SUBTLE MOUSE PRESENCE ===
+      float mDist = length(px - mousePos);
+      
+      // Very faint center highlight - like candlelight
+      float coreRadius = 60.0;
+      float coreGlow = smoothstep(coreRadius, 0.0, mDist) * u_hover * 0.5;
+      
+      // Soft outer glow
+      float glowRadius = 140.0;
+      float mGlow = smoothstep(glowRadius, coreRadius, mDist) * u_hover * 0.3;
+      
+      // Overall very faint
+      float totalGlow = (coreGlow + mGlow) * 0.15;
+      
+      // Very faint blue-purple
+      vec3 glowColor = vec3(0.18, 0.16, 0.24);
+      color += glowColor * totalGlow;
+      
+      // === INNER GLOW ===
+      float inner = smoothstep(60.0, 0.0, edgeDist) * 0.2;
+      color += vec3(0.18, 0.15, 0.25) * inner; // Brighter purple inner glow
+      
+      // === SOFT VIGNETTE ===
+      vec2 vigUV = local / halfSize;
+      float vig = 1.0 - smoothstep(0.5, 1.0, length(vigUV));
+      color *= 0.9 + vig * 0.1;
+      
+      // Subtle brightness adjustment
+      color = clamp(color, 0.0, 1.0);
+      
+      fragColor = vec4(color, shapeAlpha * 0.95);
+    }
+  `;
+
+  function compile(gl, src, type) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+      gl.deleteShader(s);
+      return null;
+    }
+    return s;
+  }
+
+  function createProgram(gl, vs, fs) {
+    const v = compile(gl, vs, gl.VERTEX_SHADER);
+    const f = compile(gl, fs, gl.FRAGMENT_SHADER);
+    if (!v || !f) return null;
+    const p = gl.createProgram();
+    gl.attachShader(p, v);
+    gl.attachShader(p, f);
+    gl.linkProgram(p);
+    return gl.getProgramParameter(p, gl.LINK_STATUS) ? p : null;
+  }
+
+  function init(element, options = {}) {
+    const canvas = document.createElement('canvas');
+    canvas.className = 'liquid-glass-canvas';
+    canvas.style.cssText = `
+      position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none; z-index: 0;
+      border-radius: inherit; display: block;
+    `;
+    element.insertBefore(canvas, element.firstChild);
+    
+    // Ensure parent has positioning
+    const computedStyle = getComputedStyle(element);
+    if (computedStyle.position === 'static') {
+      element.style.position = 'relative';
+    }
+    
+    // Ensure parent has display that respects dimensions
+    if (computedStyle.display === 'inline') {
+      element.style.display = 'block';
+    }
+    
+    Array.from(element.children).forEach(c => {
+      if (c !== canvas && !c.style.zIndex) {
+        c.style.cssText += 'position: relative; z-index: 1;';
+      }
+    });
+    
+    const gl = canvas.getContext('webgl2', { alpha: true, antialias: true });
+    if (!gl) return null;
+
+    const dpr = Math.min(window.devicePixelRatio, 2);
+    
+    function resize() {
+      const rect = element.getBoundingClientRect();
+      // Ensure canvas matches element size exactly
+      const width = Math.max(1, Math.floor(rect.width));
+      const height = Math.max(1, Math.floor(rect.height));
+      
+      if (canvas.width !== width * dpr || canvas.height !== height * dpr) {
+        canvas.width = width * dpr;
+        canvas.height = height * dpr;
+      }
+      gl.viewport(0, 0, canvas.width, canvas.height);
+    }
+    
+    // Initial resize with delay to ensure layout is complete
+    setTimeout(resize, 0);
+    // Resize again after fonts/images load
+    window.addEventListener('load', resize);
+    
+    const program = createProgram(gl, vertexShader, fragmentShader);
+    if (!program) return null;
+    
+    const buf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+      -1,-1, 1,-1, -1,1, -1,1, 1,-1, 1,1
+    ]), gl.STATIC_DRAW);
+    
+    gl.useProgram(program);
+    gl.enableVertexAttribArray(0);
+    gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+    
+    const loc = {
+      resolution: gl.getUniformLocation(program, 'u_resolution'),
+      time: gl.getUniformLocation(program, 'u_time'),
+      mouse: gl.getUniformLocation(program, 'u_mouse'),
+      mouseVel: gl.getUniformLocation(program, 'u_mouseVel'),
+      hover: gl.getUniformLocation(program, 'u_hover'),
+      baseColor: gl.getUniformLocation(program, 'u_baseColor'),
+      cornerRadius: gl.getUniformLocation(program, 'u_cornerRadius')
+    };
+    
+    const presets = {
+      header: {
+        baseColor: [0.13, 0.14, 0.18], // Lighter blue-purple
+        cornerRadius: 24.0
+      },
+      card: {
+        baseColor: [0.14, 0.15, 0.19], // Lighter blue-purple
+        cornerRadius: 28.0
+      },
+      footer: {
+        baseColor: [0.12, 0.13, 0.17], // Lighter blue-purple
+        cornerRadius: 24.0
+      },
+      'error-code': {
+        baseColor: [0.65, 0.45, 0.90], // Bright violet like OCTOPUS text
+        cornerRadius: 40.0
+      },
+      button: {
+        baseColor: [0.25, 0.27, 0.35], // Button glass color
+        cornerRadius: 12.0
+      },
+      'error-button': {
+        baseColor: [0.65, 0.45, 0.90], // Purple like 404 error code
+        cornerRadius: 12.0
+      },
+      'hero-title': {
+        baseColor: [0.70, 0.50, 0.95], // Bright violet for hero title
+        cornerRadius: 20.0
+      },
+      'about-name': {
+        baseColor: [0.68, 0.48, 0.92], // Slightly softer violet for about name
+        cornerRadius: 16.0
+      },
+      'page-title': {
+        baseColor: [0.72, 0.52, 0.96], // Bright violet for page titles
+        cornerRadius: 18.0
+      },
+      'term-title': {
+        baseColor: [0.72, 0.52, 0.96], // Bright violet like other pages
+        cornerRadius: 20.0
+      }
+    };
+    
+    const preset = presets[options.preset] || presets.card;
+    const config = { ...preset, ...options };
+    
+    let mouse = { x: 0.5, y: 0.5 };
+    let targetMouse = { x: 0.5, y: 0.5 };
+    let prevMouse = { x: 0.5, y: 0.5 };
+    let mouseVel = { x: 0, y: 0 };
+    let hover = 0;
+    let targetHover = 0;
+    
+    // Mouse trail history
+    const trailLength = 8;
+    const mouseTrail = new Array(trailLength).fill({ x: 0.5, y: 0.5 });
+    
+    function onMove(e, touch = false) {
+      const r = element.getBoundingClientRect();
+      const x = touch ? e.touches[0].clientX : e.clientX;
+      const y = touch ? e.touches[0].clientY : e.clientY;
+      targetMouse.x = (x - r.left) / r.width;
+      targetMouse.y = 1.0 - (y - r.top) / r.height;
+      targetHover = 1.0;
+      element.setAttribute('data-hover', 'true');
+    }
+    
+    function onLeave() {
+      targetHover = 0;
+      element.setAttribute('data-hover', 'false');
+    }
+    
+    element.addEventListener('mousemove', e => onMove(e), { passive: true });
+    element.addEventListener('mouseenter', e => onMove(e), { passive: true });
+    element.addEventListener('mouseleave', onLeave);
+    element.addEventListener('touchmove', e => onMove(e, true), { passive: true });
+    element.addEventListener('touchend', onLeave);
+    
+    let startTime = performance.now();
+    
+    function render() {
+      const time = (performance.now() - startTime) * 0.001;
+      
+      // Save previous position
+      prevMouse.x = mouse.x;
+      prevMouse.y = mouse.y;
+      
+      // Smooth follow with easing
+      const ease = 0.12;
+      mouse.x += (targetMouse.x - mouse.x) * ease;
+      mouse.y += (targetMouse.y - mouse.y) * ease;
+      
+      // Calculate velocity
+      mouseVel.x = (mouse.x - prevMouse.x) * 10.0;
+      mouseVel.y = (mouse.y - prevMouse.y) * 10.0;
+      
+      // Update trail
+      for (let i = trailLength - 1; i > 0; i--) {
+        mouseTrail[i] = { ...mouseTrail[i - 1] };
+      }
+      mouseTrail[0] = { x: mouse.x, y: mouse.y };
+      
+      hover += (targetHover - hover) * 0.08;
+      
+      gl.useProgram(program);
+      gl.uniform2f(loc.resolution, canvas.width, canvas.height);
+      gl.uniform1f(loc.time, time);
+      gl.uniform2f(loc.mouse, mouse.x, mouse.y);
+      gl.uniform2f(loc.mouseVel, mouseVel.x, mouseVel.y);
+      gl.uniform1f(loc.hover, hover);
+      gl.uniform3fv(loc.baseColor, config.baseColor);
+      gl.uniform1f(loc.cornerRadius, config.cornerRadius * dpr);
+      
+      gl.enable(gl.BLEND);
+      gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+      gl.drawArrays(gl.TRIANGLES, 0, 6);
+      
+      requestAnimationFrame(render);
+    }
+    
+    render();
+    window.addEventListener('resize', resize);
+    
+    // Use ResizeObserver to handle dynamic size changes
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.target === element) {
+          resize();
+        }
+      }
+    });
+    resizeObserver.observe(element);
+    
+    return { 
+      destroy: () => {
+        resizeObserver.disconnect();
+        canvas.remove();
+      }, 
+      resize 
+    };
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('[data-liquid-glass]').forEach(el => {
+      init(el, { preset: el.dataset.liquidGlass || 'card' });
+    });
+  });
+
+  window.LiquidGlass = { init };
+})();

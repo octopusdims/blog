@@ -1,0 +1,22 @@
+{{ define "main" }}
+<div class="page-categories">
+  <div class="container">
+    <header class="page-header">
+      <div class="page-icon kaomoji">(｡◕‿◕｡)</div>
+      <div class="categories-title-glass" data-liquid-glass="page-title">
+        <h1 class="page-title">分类</h1>
+      </div>
+      <p class="page-subtitle">共 {{ len .Data.Terms }} 个分类</p>
+    </header>
+    
+    <div class="categories-grid">
+      {{ range .Data.Terms.ByCount }}
+        <a href="{{ .Page.RelPermalink }}" class="category-card">
+          <h2 class="category-name">{{ .Page.Title }}</h2>
+          <span class="category-count">{{ .Count }} 篇文章</span>
+        </a>
+      {{ end }}
+    </div>
+  </div>
+</div>
+{{ end }}

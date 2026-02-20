@@ -1,0 +1,877 @@
+/* Main Styles - Liquid Glass Edition */
+
+/* Reset & Base */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text-primary);
+  background: transparent;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Typography - Apple Style */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+h1 { font-size: 3rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.5rem; }
+h4 { font-size: 1.25rem; }
+
+p {
+  margin-bottom: var(--space-md);
+  line-height: 1.7;
+}
+
+a {
+  color: var(--accent-color);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+}
+
+a:hover {
+  color: var(--accent-hover);
+  opacity: 0.9;
+}
+
+/* Container */
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--space-lg);
+}
+
+/* Main */
+.main {
+  min-height: calc(100vh - var(--header-height) - 100px);
+  padding-top: var(--header-height);
+}
+
+.layout {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--space-lg);
+}
+
+.sidebar {
+  width: 240px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 100;
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Full width layout for pages without sidebar */
+.layout-full {
+  display: block;
+  padding: 0 var(--space-lg);
+}
+
+.layout-full .content-full {
+  max-width: var(--container-max);
+  margin: 0 auto;
+}
+
+.is-home .layout-full {
+  padding: 0;
+}
+
+.is-home .layout-full .content-full {
+  max-width: none;
+}
+
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 6px 0;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  min-height: 30px;
+  background: transparent;
+  border-radius: 3px;
+  border: 1px solid transparent;
+  background-clip: padding-box;
+}
+
+.sidebar:hover::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.sidebar:hover::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 92, 246, 0.75);
+}
+
+.sidebar-inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.sidebar-card {
+  padding: var(--space-lg);
+  border-radius: 16px;
+  border: 1px solid var(--glass-border);
+  border-top: 1px solid rgba(255, 255, 255, 0.25);
+  background: 
+    var(--glass-highlight),
+    var(--glass-bg);
+  backdrop-filter: blur(28px) saturate(220%);
+  -webkit-backdrop-filter: blur(28px) saturate(220%);
+  box-shadow: var(--glass-shadow);
+  /* 3D Tilt Base */
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: transform 0.1s ease-out, box-shadow 0.3s ease;
+}
+
+/* 3D Tilt Hover State */
+.sidebar-card.tilt-active {
+  transition: transform 0.1s ease-out;
+}
+
+/* Blog Title Capsule */
+.blog-title-card {
+  padding: var(--space-sm) var(--space-md);
+  text-align: center;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(196, 181, 253, 0.1) 100%);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+.blog-title-link {
+  display: block;
+  text-decoration: none;
+}
+
+.blog-title-text {
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Sidebar Title */
+.sidebar-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--space-sm);
+  padding-bottom: var(--space-xs);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.title-icon {
+  font-size: 0.875rem;
+}
+
+/* Sidebar Title Link */
+.sidebar-title-link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  color: inherit;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.sidebar-title-link:hover {
+  opacity: 0.8;
+}
+
+/* Profile Card */
+.profile-card {
+  text-align: center;
+}
+
+.profile-card .avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  margin: 0 auto var(--space-sm);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.profile-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-info h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: var(--space-xs);
+  color: var(--text-primary);
+}
+
+.profile-info p {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-sm);
+  line-height: 1.5;
+}
+
+.profile-meta {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-sm);
+  font-size: 0.6875rem;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Sidebar List */
+.sidebar-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.sidebar-list li {
+  display: flex;
+  align-items: center;
+  font-size: 0.9375rem;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  color: var(--text-primary);
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+}
+
+.sidebar-link:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--accent-color);
+}
+
+.link-name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sidebar-list .count,
+.sidebar-list .date {
+  color: var(--text-tertiary);
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.15rem 0.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-full);
+  margin-left: var(--space-sm);
+}
+
+/* Recent Posts */
+.recent-posts .recent-post-link {
+  padding: var(--space-md) var(--space-sm);
+}
+
+.recent-post-title {
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+/* Tag Cloud Compact */
+.tag-cloud-compact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+.tag-item-compact {
+  font-size: 0.8125rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+}
+
+.tag-item-compact:hover {
+  background: var(--accent-color);
+  border-color: var(--accent-color);
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* Selection - Glass Effect */
+::selection {
+  background-color: var(--accent-color);
+  color: white;
+}
+
+/* Scrollbar - macOS Auto-Hide Style (Minimal) */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+  margin-top: calc(var(--header-height) + 8px);
+  margin-bottom: 8px;
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* 滑块平时完全隐形 */
+::-webkit-scrollbar-thumb {
+  min-height: 40px;
+  background: transparent;
+  border-radius: 4px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+/* 悬停时浮现细线 */
+body:hover::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* 悬停滑块稍微明显 */
+body:hover::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 92, 246, 0.8);
+}
+
+/* Button reset */
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+/* Image styling */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Code styling */
+code {
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', monospace;
+  font-size: 0.9em;
+}
+.light .tag-cloud a {
+  background: rgba(15, 23, 42, 0.08);
+}
+
+/* Floating Action Button - Subtle Sidebar Toggle */
+.fab-sidebar-toggle {
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  color: var(--text-secondary);
+  cursor: pointer;
+  z-index: 1001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-lg);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fab-sidebar-toggle:hover {
+  background: var(--bg-tertiary);
+  color: var(--accent-color);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-xl);
+}
+
+.fab-sidebar-toggle:active {
+  transform: scale(0.95);
+}
+
+.fab-sidebar-toggle svg {
+  width: 22px;
+  height: 22px;
+}
+
+.fab-sidebar-toggle.hidden {
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.8);
+}
+
+/* Mobile FAB Position */
+@media (max-width: 1200px) {
+  .fab-sidebar-toggle {
+    right: 20px;
+  }
+}
+
+/* Sidebar Drawer - Slides from left */
+.sidebar-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 320px;
+  max-width: 85vw;
+  height: 100vh;
+  background: 
+    linear-gradient(180deg, rgba(255,255,255,0.08) 0%, transparent 30%),
+    var(--glass-bg);
+  backdrop-filter: blur(36px) saturate(240%);
+  -webkit-backdrop-filter: blur(36px) saturate(240%);
+  border-right: 1px solid var(--glass-border);
+  border-top: none;
+  z-index: 1002;
+  transform: translateX(-100%);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  box-shadow: 
+    4px 0 40px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-drawer.active {
+  transform: translateX(0);
+}
+
+.sidebar-drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-lg);
+  border-bottom: 1px solid var(--glass-border);
+  flex-shrink: 0;
+}
+
+.sidebar-drawer-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.sidebar-drawer-close {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.sidebar-drawer-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: var(--text-primary);
+}
+
+.sidebar-drawer-close svg {
+  width: 20px;
+  height: 20px;
+}
+
+.sidebar-drawer-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-md);
+}
+
+.sidebar-drawer-content .sidebar-inner {
+  background: transparent;
+  backdrop-filter: none;
+  border: none;
+  padding: 0;
+}
+
+.sidebar-drawer-content .sidebar-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--glass-border);
+  margin-bottom: var(--space-md);
+}
+
+/* Sidebar Overlay */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 1001;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s;
+}
+
+.sidebar-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .fab-sidebar-toggle {
+    bottom: 24px;
+    right: 24px;
+    width: 48px;
+    height: 48px;
+  }
+  
+  .fab-sidebar-toggle svg {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .sidebar-drawer {
+    width: 280px;
+  }
+}
+/* ========================================
+   Scrollbar - Hidden but Functional
+   ======================================== */
+
+/* 完全隐藏滚动条但保留滚动功能 */
+html {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
+}
+
+html::-webkit-scrollbar {
+  display: none; /* Chrome/Safari/Edge */
+}
+
+/* 侧边栏同样隐藏滚动条 */
+.sidebar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.sidebar::-webkit-scrollbar {
+  display: none;
+}
+/* ========================================
+   Floating Shapes - Decorative Elements
+   ======================================== */
+
+/* 漂浮装饰元素容器 */
+.floating-shapes {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* 单个形状 */
+.shape {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  font-size: 1.25rem;
+  color: rgba(167, 139, 250, 0.25);
+  animation: floatShape 8s ease-in-out infinite;
+  animation-delay: var(--delay);
+  user-select: none;
+}
+
+/* 漂浮动画 */
+@keyframes floatShape {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0.25;
+  }
+  50% {
+    transform: translateY(-30px) rotate(180deg);
+    opacity: 0.45;
+  }
+}
+
+/* 不同形状的颜色变化 */
+.shape:nth-child(odd) {
+  color: rgba(167, 139, 250, 0.3);
+}
+
+.shape:nth-child(even) {
+  color: rgba(96, 165, 250, 0.25);
+}
+
+/* 响应式 - 移动端减少装饰 */
+@media (max-width: 768px) {
+  .shape {
+    font-size: 1rem;
+    animation-duration: 10s;
+  }
+  
+  .shape:nth-child(5),
+  .shape:nth-child(6) {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .shape {
+    font-size: 0.875rem;
+  }
+  
+  .shape:nth-child(4) {
+    display: none;
+  }
+}
+
+/* ========================================
+   Kaomoji Styles - Fun Japanese Emoticons
+   ======================================== */
+
+.kaomoji {
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+  line-height: 1;
+  user-select: none;
+}
+
+/* 首页Hero区域 */
+.hero-icon.kaomoji {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: rgba(167, 139, 250, 0.9);
+  animation: kaomojiBounce 2s ease-in-out infinite;
+  display: block;
+}
+
+@keyframes kaomojiBounce {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-5px) scale(1.1);
+  }
+}
+
+/* 关于页 */
+.about-icon.kaomoji {
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
+  color: rgba(167, 139, 250, 0.8);
+  animation: kaomojiWave 3s ease-in-out infinite;
+  display: block;
+}
+
+@keyframes kaomojiWave {
+  0%, 100% { transform: rotate(-5deg); }
+  50% { transform: rotate(5deg); }
+}
+
+/* 页面头部 */
+.page-icon.kaomoji {
+  font-size: 1.75rem;
+  margin-bottom: 0.75rem;
+  color: rgba(167, 139, 250, 0.7);
+  animation: kaomojiFloat 4s ease-in-out infinite;
+  display: block;
+}
+
+@keyframes kaomojiFloat {
+  0%, 100% {
+    transform: translateY(0);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translateY(-8px);
+    opacity: 1;
+  }
+}
+
+/* 404页 */
+.error-icon.kaomoji {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-secondary);
+  animation: kaomojiShrug 2s ease-in-out infinite;
+  display: block;
+}
+
+@keyframes kaomojiShrug {
+  0%, 100% { transform: rotate(-2deg); }
+  50% { transform: rotate(2deg); }
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .hero-icon.kaomoji {
+    font-size: 2rem;
+  }
+  
+  .about-icon.kaomoji {
+    font-size: 1.75rem;
+  }
+  
+  .page-icon.kaomoji {
+    font-size: 1.5rem;
+  }
+}
+
+/* ========================================
+   Octopus Kaomoji Special Effects
+   ======================================== */
+
+/* 首页章鱼特殊样式 */
+.hero-icon.kaomoji:contains("Ｃ:。ミ") {
+  font-size: 3rem;
+  letter-spacing: 0.1em;
+  animation: octopusFloat 3s ease-in-out infinite;
+}
+
+@keyframes octopusFloat {
+  0%, 100% {
+    transform: translateY(0) rotate(-3deg);
+  }
+  25% {
+    transform: translateY(-8px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(0) rotate(3deg);
+  }
+  75% {
+    transform: translateY(-5px) rotate(0deg);
+  }
+}
+
+/* 触手摆动效果 */
+.hero-icon.kaomoji:contains("Ｃ:。ミ")::after {
+  content: ' ~';
+  animation: tentacleWave 1s ease-in-out infinite;
+  display: inline-block;
+}
+
+@keyframes tentacleWave {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(20deg); }
+}
+
+/* ========================================
+   Octopus Kaomoji - Advanced Animation
+   ======================================== */
+
+/* 章鱼容器 - 主体浮动 */
+.hero-icon.kaomoji.octopus {
+  font-size: 2.5rem;
+  display: inline-flex;
+  align-items: baseline;
+  animation: octopusFloat 4s ease-in-out infinite;
+  transform-origin: center bottom;
+}
+
+/* 主体浮动动画 - Y轴正弦波，位移5px，周期4s */
+@keyframes octopusFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+/* 章鱼头部 */
+.octopus-head {
+  display: inline-block;
+}
+
+/* 触手基础样式 */
+.octopus-tentacle {
+  display: inline-block;
+  transform-origin: left center;
+}
+
+/* 触手1 (。) - 轻微摆动 */
+.octopus-tentacle.t1 {
+  animation: tentacleWave1 2s ease-in-out infinite;
+  animation-delay: 0s;
+}
+
+@keyframes tentacleWave1 {
+  0%, 100% {
+    transform: skewX(0deg) translateX(0);
+  }
+  50% {
+    transform: skewX(8deg) translateX(2px);
+  }
+}
+
+/* 触手2 (ミ) - 异步摆动，不同延迟 */
+.octopus-tentacle.t2 {
+  animation: tentacleWave2 2.5s ease-in-out infinite;
+  animation-delay: 0.4s;
+}
+
+@keyframes tentacleWave2 {
+  0%, 100% {
+    transform: skewX(0deg) translateX(0);
+  }
+  50% {
+    transform: skewX(-6deg) translateX(-1px);
+  }
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .hero-icon.kaomoji.octopus {
+    font-size: 2rem;
+  }
+}

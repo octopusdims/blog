@@ -1,0 +1,64 @@
+{{ define "main" }}
+{{ $pages := where .Site.RegularPages "Type" "posts" }}
+<div class="page-archive">
+  <div class="container">
+    <header class="page-header">
+      <div class="page-icon kaomoji">(⌐■_■)</div>
+      <div class="archive-title-glass" data-liquid-glass="page-title">
+        <h1 class="page-title">归档</h1>
+      </div>
+      <p class="page-subtitle">共 {{ $pages | len }} 篇文章</p>
+    </header>
+    
+    <div class="archive-timeline" id="archiveTimeline">
+      {{ range $index, $year := $pages.GroupByDate "2006" }}
+        <div class="archive-year" data-year-index="{{ $index }}">
+          <h2 class="year-title">{{ .Key }}</h2>
+          <div class="year-posts">
+            {{ range .Pages }}
+              <article class="archive-item">
+                <time class="archive-date" datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">{{ .Date.Format "01-02" }}</time>
+                <a href="{{ .RelPermalink }}" class="archive-title">{{ .Title }}</a>
+              </article>
+            {{ end }}
+          </div>
+        </div>
+      {{ end }}
+    </div>
+  </div>
+</div>
+
+<script>
+  // Archive year cards staggered fade-in animation
+  document.addEventListener('DOMContentLoaded', function() {
+    const archiveYears = document.querySelectorAll('.archive-year');
+    
+    if (archiveYears.length > 0 && 'IntersectionObserver' in window) {
+      const yearObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const yearIndex = parseInt(entry.target.dataset.yearIndex) || 0;
+            setTimeout(() => {
+              entry.target.classList.add('animate-in');
+            }, yearIndex * 150);
+            
+            yearObserver.unobserve(entry.target);
+          }
+        });
+      }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      });
+      
+      archiveYears.forEach(year => {
+        yearObserver.observe(year);
+      });
+    } else {
+      // Fallback: display directly
+      archiveYears.forEach(year => {
+        year.classList.add('animate-in');
+      });
+    }
+  });
+</script>
+{{ end }}

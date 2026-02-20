@@ -1,0 +1,40 @@
+{{ define "main" }}
+<div class="page-gallery">
+  <div class="container">
+    <header class="page-header">
+      <div class="page-icon kaomoji">(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧</div>
+      <h1 class="page-title">{{ .Title }}</h1>
+      <p class="page-subtitle">{{ .Params.subtitle | default "记录美好瞬间" }}</p>
+    </header>
+    
+    <div class="gallery-grid">
+      {{ $gallery := .Site.Data.gallery }}
+      {{ if $gallery }}
+        {{ range $gallery }}
+          <div class="gallery-item">
+            <a href="{{ .src }}" class="gallery-link" data-fancybox="gallery" data-caption="{{ .title }}">
+              <div class="gallery-image">
+                <img src="{{ .thumb | default .src }}" alt="{{ .title }}" loading="lazy">
+                <div class="gallery-overlay">
+                  <h3 class="gallery-title">{{ .title }}</h3>
+                  {{ if .desc }}
+                    <p class="gallery-desc">{{ .desc }}</p>
+                  {{ end }}
+                </div>
+              </div>
+            </a>
+          </div>
+        {{ end }}
+      {{ else if .Content }}
+        {{/* 允许通过 Markdown 内容创建相册 */}}
+        {{ .Content }}
+      {{ else }}
+        <div class="gallery-empty">
+          <p>暂无相册内容</p>
+          <p class="gallery-hint">在 <code>data/gallery.yml</code> 中添加相册数据</p>
+        </div>
+      {{ end }}
+    </div>
+  </div>
+</div>
+{{ end }}

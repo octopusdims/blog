@@ -1,0 +1,133 @@
+/* CSS Variables - Dark Mode Only */
+
+:root {
+  /* Glass Effect - Liquid Glass */
+  --glass-bg: rgba(40, 40, 45, 0.55);
+  --glass-bg-light: rgba(255, 255, 255, 0.1);
+  --glass-bg-dark: rgba(30, 30, 35, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.18);
+  --glass-border-light: rgba(255, 255, 255, 0.08);
+  --glass-border-dark: rgba(255, 255, 255, 0.12);
+  --glass-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.35),
+    0 2px 8px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  --glass-highlight: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.15) 0%,
+    rgba(255, 255, 255, 0.05) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  --glass-blur: 28px;
+  --glass-saturate: 220%;
+  
+  /* Background Colors - Brighter Dark */
+  --bg-primary: #121214;
+  --bg-secondary: rgba(30, 30, 35, 0.7);
+  --bg-tertiary: rgba(45, 45, 52, 0.8);
+  --bg-gradient: linear-gradient(135deg, #121214 0%, #1a1a1e 50%, #222226 100%);
+  
+  /* Text Colors - Premium Gray Scale */
+  --text-primary: #ffffff;
+  --text-secondary: #a0a0a5;
+  --text-tertiary: #6e6e73;
+  --text-muted: #48484a;
+  
+  /* Border Colors - Subtle */
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-light: rgba(255, 255, 255, 0.04);
+  
+  /* Accent Colors - Violet */
+  --accent-color: #8b5cf6;
+  --accent-hover: #a78bfa;
+  --accent-gradient: linear-gradient(135deg, #8b5cf6 0%, #c4b5fd 100%);
+  
+  /* Shadows - Deep Black */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.6);
+  --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.7);
+  
+  /* Typography */
+  --font-sans: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-serif: 'Noto Serif SC', Georgia, serif;
+  
+  /* Spacing */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+  --space-4xl: 6rem;
+  
+  /* Layout */
+  --container-max: 2400px;
+  --header-height: 80px;
+  
+  /* Transitions */
+  --transition-fast: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-spring: 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  
+  /* Border Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+}
+
+/* Apply dark mode by default - no light mode */
+html {
+  color-scheme: dark;
+}
+
+body {
+  background: transparent;
+  color: var(--text-primary);
+}
+
+/* Glass Effect Classes */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+.glass-strong {
+  background: rgba(28, 28, 30, 0.65);
+  backdrop-filter: blur(40px) saturate(200%);
+  -webkit-backdrop-filter: blur(40px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* Liquid Shine Effect */
+.glass-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-shine::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.15),
+    transparent
+  );
+  transition: left 0.5s;
+}
+
+.glass-shine:hover::before {
+  left: 100%;
+}

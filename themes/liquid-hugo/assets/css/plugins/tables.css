@@ -1,0 +1,63 @@
+/* Tables - Simple */
+
+.post-content table {
+  width: 100%;
+  margin: 1.5rem 0;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+}
+
+.post-content th,
+.post-content td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.post-content th {
+  font-weight: 600;
+  color: #374151;
+  background: #f9fafb;
+}
+
+.post-content td {
+  color: #4b5563;
+}
+
+.post-content tr:last-child td {
+  border-bottom: none;
+}
+
+/* Dark mode */
+.dark .post-content th,
+.dark .post-content td {
+  border-bottom-color: #374151;
+}
+
+.dark .post-content th {
+  color: #e5e7eb;
+  background: #1f2937;
+}
+
+.dark .post-content td {
+  color: #d1d5db;
+}
+
+/* KaTeX in tables */
+.post-content td .katex {
+  font-size: 0.95em;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .post-content table {
+    display: block;
+    overflow-x: auto;
+  }
+  
+  .post-content th,
+  .post-content td {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+  }
+}

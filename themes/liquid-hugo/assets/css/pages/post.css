@@ -1,0 +1,358 @@
+/* Post Page - Ultra-Wide Fluid Layout */
+
+/* 1. Global Layout Container: remove rigid centering, use fluid layout */
+.post-header,
+.post-body,
+.post-footer {
+  width: 96%; /* Use 96% of screen width */
+  max-width: 2400px; /* Upper limit for ultra-wide screens */
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* 2. Unified Alignment Baseline (key adjustment) */
+/* TOC width(240px) + gap(80px) = 320px */
+@media (min-width: 1025px) {
+  .post-header,
+  .post-footer {
+    padding-left: 320px; 
+    text-align: left;
+  }
+  
+  .post-meta {
+    justify-content: flex-start;
+  }
+}
+
+/* 3. Header Area: more bold and powerful */
+.post-header {
+  padding-top: 80px;
+  margin-bottom: 60px;
+}
+
+.post-title {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin-bottom: 2rem;
+  max-width: 900px;
+  text-wrap: balance;
+}
+
+.post-meta {
+  display: flex;
+  gap: 2.5rem;
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+}
+
+/* 4. Main Layout: fixed TOC, fluid content */
+.post-body {
+  display: flex;
+  align-items: flex-start;
+  gap: 80px;
+}
+
+.post-toc {
+  width: 240px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 100px;
+  max-height: calc(100vh - 140px);
+  background: var(--glass-bg);
+  backdrop-filter: blur(30px) saturate(200%);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 1.25rem;
+  font-size: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.post-body .post-content {
+  flex: 1; /* Occupy all remaining space */
+  min-width: 0;
+  max-width: 1800px; /* Further widen content for code and images */
+  font-size: 1.25rem;
+  line-height: 1.9;
+}
+
+/* 5. Content Heading Styles */
+.post-content h1 { 
+  font-size: 3rem; 
+  margin: 4rem 0 2rem; 
+  border-bottom: 3px solid var(--border-color); 
+  padding-bottom: 1rem; 
+}
+.post-content h2 { font-size: 2.2rem; margin: 3.5rem 0 1.5rem; }
+.post-content h3 { font-size: 1.7rem; margin: 2.5rem 0 1.2rem; }
+
+/* 6. Footer Area */
+.post-footer {
+  margin-top: 100px;
+  padding: 60px 0;
+  border-top: 1px solid var(--border-color);
+}
+
+/* 7. Tag Styles - Pill Shape */
+.post-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.tag-link {
+  display: inline-block;
+  font-size: 0.875rem;
+  padding: 0.4rem 1rem;
+  background: rgba(139, 92, 246, 0.15);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 9999px;
+  color: var(--accent-color);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.tag-link:hover {
+  background: var(--accent-color);
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* 8. Responsive Fallback: auto-center on small screens */
+@media (max-width: 1400px) {
+  .post-body { gap: 50px; }
+  .post-header, .post-footer { padding-left: 290px; } /* Reduce padding to match gap */
+}
+
+@media (max-width: 1200px) {
+  .post-header, .post-footer { padding-left: 0; text-align: center; }
+  .post-meta { justify-content: center; }
+  .post-body .post-content { max-width: 850px; margin: 0 auto; }
+  .post-toc { display: none; }
+  
+  .post-tags {
+    justify-content: center;
+  }
+}
+
+/* ========================================
+   9. TOC Styles - Hugo Compatible (H1-H4)
+   ======================================== */
+/* TOC Title - Fixed at top */
+.toc-header {
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--glass-border);
+  flex-shrink: 0;
+}
+
+
+.toc-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+/* TOC Content Area - Scrollable */
+.toc-content {
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex: 1;
+  margin-right: -0.5rem;
+  padding-right: 0.5rem;
+}
+/* Styled Scrollbar */
+.toc-content::-webkit-scrollbar {
+  width: 4px;
+}
+.toc-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+.toc-content::-webkit-scrollbar-thumb {
+  background: var(--glass-border);
+  border-radius: 2px;
+}
+.toc-content::-webkit-scrollbar-thumb:hover {
+  background: var(--text-tertiary);
+}
+/* Firefox Scrollbar */
+.toc-content {
+  scrollbar-width: thin;
+  scrollbar-color: var(--glass-border) transparent;
+}
+/* TOC List Base Styles */
+.toc-content ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+/* All nested lists */
+.toc-content ul ul {
+  padding-left: 1rem;
+  margin-top: 0.25rem;
+}
+/* TOC List Item */
+.toc-content li {
+  margin: 0.35rem 0;
+  line-height: 1.5;
+}
+/* TOC Link Base Styles */
+.toc-content a {
+  text-decoration: none;
+  color: var(--text-secondary);
+  transition: all 0.2s ease;
+  display: block;
+  padding: 0.15rem 0;
+  font-size: 0.85rem;
+  border-radius: 4px;
+}
+.toc-content a:hover {
+  color: var(--accent-color);
+  padding-left: 0.25rem;
+}
+/* Highlight currently reading TOC item */
+.toc-content a.active {
+  color: var(--accent-color);
+  font-weight: 500;
+  padding-left: 0.25rem;
+}
+/* H1 - Top level, boldest */
+.toc-content > nav > ul > li > a {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+/* H2 - Second level */
+.toc-content > nav > ul > li > ul > li > a {
+  font-weight: 500;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+/* H3 - Third level */
+.toc-content > nav > ul > li > ul > li > ul > li > a {
+  font-weight: 400;
+  color: var(--text-tertiary);
+  font-size: 0.8rem;
+}
+/* H4 - Deepest level */
+.toc-content > nav > ul > li > ul > li > ul > li > ul > li > a {
+  font-weight: 400;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+}
+/* Hover for all levels */
+.toc-content a:hover {
+  color: var(--accent-color);
+}
+
+/* ========================================
+   10. Blockquote Styles
+   ======================================== */
+
+.post-content blockquote {
+  position: relative;
+  margin: 2rem 0;
+  padding: 1.5rem 2rem;
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  border-left: 4px solid var(--accent-color);
+  color: var(--text-secondary);
+  font-style: italic;
+  line-height: 1.8;
+  transition: all 0.3s ease;
+}
+
+.post-content blockquote::before {
+  content: '"';
+  position: absolute;
+  top: 0.5rem;
+  left: 1rem;
+  font-size: 4rem;
+  color: var(--accent-color);
+  opacity: 0.3;
+  font-family: Georgia, serif;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.post-content blockquote::after {
+  content: '"';
+  position: absolute;
+  bottom: 0.5rem;
+  right: 1rem;
+  font-size: 4rem;
+  color: var(--accent-color);
+  opacity: 0.3;
+  font-family: Georgia, serif;
+  line-height: 1;
+  pointer-events: none;
+  transform: rotate(180deg);
+}
+
+.post-content blockquote:hover {
+  border-color: var(--accent-color);
+  box-shadow: 0 4px 20px rgba(139, 92, 246, 0.15);
+}
+
+.post-content blockquote p {
+  margin: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.post-content blockquote p:not(:last-child) {
+  margin-bottom: 1rem;
+}
+
+/* Links inside blockquote */
+.post-content blockquote a {
+  color: var(--accent-hover);
+  border-bottom: 1px dashed var(--accent-color);
+}
+
+.post-content blockquote a:hover {
+  border-bottom-style: solid;
+}
+
+/* Code inside blockquote */
+.post-content blockquote code {
+  background: rgba(139, 92, 246, 0.15);
+  color: var(--accent-hover);
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+/* Emphasis inside blockquote */
+.post-content blockquote strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* Nested blockquote */
+.post-content blockquote blockquote {
+  margin: 1rem 0;
+  background: rgba(139, 92, 246, 0.05);
+  border-left-width: 2px;
+}
+
+/* Citation/Attribution */
+.post-content blockquote cite,
+.post-content blockquote footer {
+  display: block;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: var(--text-tertiary);
+  font-style: normal;
+}
+
+.post-content blockquote cite::before,
+.post-content blockquote footer::before {
+  content: '— ';
+  color: var(--accent-color);
+}

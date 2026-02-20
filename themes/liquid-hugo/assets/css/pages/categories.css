@@ -1,0 +1,221 @@
+/* Categories Page - Liquid Glass Edition */
+.page-categories {
+  padding: var(--space-3xl) 0;
+  animation: categories-page-fade-in 0.3s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+@keyframes categories-page-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: var(--space-3xl);
+  animation: categories-header-reveal 0.3s cubic-bezier(0.4, 0, 0.2, 1) 0.05s both;
+}
+
+@keyframes categories-header-reveal {
+  from { 
+    opacity: 0; 
+    transform: translateY(-20px);
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0);
+  }
+}
+
+/* Categories List Title - Liquid Glass Effect with Text Mask */
+.categories-title-glass {
+  position: relative;
+  display: inline-block;
+  width: 140px;
+  height: 80px;
+  margin-bottom: var(--space-sm);
+  filter: drop-shadow(0 0 50px rgba(167, 139, 250, 0.6));
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 140 80'%3E%3Ctext x='50%25' y='60%25' dominant-baseline='middle' text-anchor='middle' font-size='56' font-weight='800' font-family='Inter, system-ui, -apple-system, sans-serif' fill='white' style='letter-spacing: -0.03em;'%3E%E5%88%86%E7%B1%BB%3C/text%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 140 80'%3E%3Ctext x='50%25' y='60%25' dominant-baseline='middle' text-anchor='middle' font-size='56' font-weight='800' font-family='Inter, system-ui, -apple-system, sans-serif' fill='white' style='letter-spacing: -0.03em;'%3E%E5%88%86%E7%B1%BB%3C/text%3E%3C/svg%3E");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  animation: categories-title-float 4s ease-in-out infinite;
+}
+
+@keyframes categories-title-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* Canvas 填满容器 */
+.categories-title-glass .liquid-glass-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Category Term Page - Dynamic Title with SVG Mask */
+.category-term-glass {
+  position: relative;
+  display: inline-block;
+  width: 200px;
+  height: 80px;
+  margin-bottom: var(--space-sm);
+  filter: drop-shadow(0 0 50px rgba(167, 139, 250, 0.6));
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  animation: categories-title-float 4s ease-in-out infinite;
+}
+
+.category-term-glass .liquid-glass-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.category-term-glass .page-title {
+  position: relative;
+  z-index: 1;
+  opacity: 0 !important;
+  font-size: 3rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin: 0;
+  white-space: nowrap;
+  background: none !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+.categories-title-glass .page-title {
+  position: relative;
+  z-index: 1;
+  opacity: 0 !important;
+  font-size: 3rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin: 0;
+  white-space: nowrap;
+  background: none !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+.page-subtitle {
+  font-size: 1.125rem;
+  color: var(--text-secondary);
+}
+
+/* Categories Grid */
+.categories-grid {
+  max-width: 900px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--space-lg);
+}
+
+/* Category Card - Glass Style */
+.category-card {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-xl);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  transition: all var(--transition-spring);
+  text-align: center;
+  box-shadow: var(--glass-shadow);
+  opacity: 0;
+  animation: card-scale-up 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Staggered animation delays */
+.category-card:nth-child(1) { animation-delay: 0.15s; }
+.category-card:nth-child(2) { animation-delay: 0.22s; }
+.category-card:nth-child(3) { animation-delay: 0.29s; }
+.category-card:nth-child(4) { animation-delay: 0.36s; }
+.category-card:nth-child(5) { animation-delay: 0.43s; }
+.category-card:nth-child(6) { animation-delay: 0.50s; }
+.category-card:nth-child(7) { animation-delay: 0.57s; }
+.category-card:nth-child(8) { animation-delay: 0.64s; }
+
+@keyframes card-scale-up {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.category-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  border-color: var(--accent-color);
+}
+
+.category-name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--space-sm);
+  letter-spacing: -0.02em;
+}
+
+.category-count {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.category-card:hover .category-count {
+  color: var(--accent-color);
+}
+
+@media (max-width: 640px) {
+  .categories-title-glass {
+    width: 100px;
+    height: 60px;
+    filter: drop-shadow(0 0 40px rgba(167, 139, 250, 0.5));
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'%3E%3Ctext x='50%25' y='60%25' dominant-baseline='middle' text-anchor='middle' font-size='42' font-weight='800' font-family='Inter, system-ui, -apple-system, sans-serif' fill='white' style='letter-spacing: -0.03em;'%3E%E5%88%86%E7%B1%BB%3C/text%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'%3E%3Ctext x='50%25' y='60%25' dominant-baseline='middle' text-anchor='middle' font-size='42' font-weight='800' font-family='Inter, system-ui, -apple-system, sans-serif' fill='white' style='letter-spacing: -0.03em;'%3E%E5%88%86%E7%B1%BB%3C/text%3E%3C/svg%3E");
+  }
+  
+  .category-term-glass {
+    width: 160px;
+    height: 60px;
+  }
+  
+  .categories-title-glass .page-title {
+    font-size: 2.25rem;
+    opacity: 0 !important;
+    background: none !important;
+  }
+  
+  .category-term-glass .page-title {
+    font-size: 2.25rem;
+    opacity: 0 !important;
+    background: none !important;
+  }
+  
+  .category-term-glass .page-title {
+    font-size: 2.25rem;
+  }
+  
+  .categories-grid {
+    grid-template-columns: 1fr;
+  }
+}

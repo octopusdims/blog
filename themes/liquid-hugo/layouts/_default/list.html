@@ -1,0 +1,35 @@
+{{ define "main" }}
+<div class="archive-page">
+  <div class="container">
+    <header class="page-header">
+      <h1 class="page-title">{{ .Title }}</h1>
+    </header>
+    
+    <div class="archive-content">
+      {{ $paginator := .Paginate .Pages }}
+      <div class="posts-list">
+        {{ range $paginator.Pages }}
+          <article class="archive-post-item">
+            <a href="{{ .RelPermalink }}" class="archive-post-link">
+              <time class="archive-post-date" datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">{{ .Date.Format "2006-01-02" }}</time>
+              <h3 class="archive-post-title">{{ .Title }}</h3>
+            </a>
+          </article>
+        {{ end }}
+      </div>
+      
+      {{ if gt $paginator.TotalPages 1 }}
+        <nav class="pagination">
+          {{ if $paginator.HasPrev }}
+            <a href="{{ $paginator.Prev.RelPermalink }}" class="pagination-prev">← 上一页</a>
+          {{ end }}
+          <span class="pagination-info">{{ $paginator.PageNumber }} / {{ $paginator.TotalPages }}</span>
+          {{ if $paginator.HasNext }}
+            <a href="{{ $paginator.Next.RelPermalink }}" class="pagination-next">下一页 →</a>
+          {{ end }}
+        </nav>
+      {{ end }}
+    </div>
+  </div>
+</div>
+{{ end }}

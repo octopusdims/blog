@@ -1,0 +1,118 @@
+baseURL = 'https://octopusdims.github.io'
+languageCode = 'zh-CN'
+title = 'Hexo'
+theme = 'liquid-hugo'
+[pagination]
+  pagerSize = 6
+enableEmoji = true
+enableGitInfo = false
+
+[params]
+  # Site Info
+  suffix = "DIMS"
+  author = "OCTOPUS"
+  keyword = "blog"
+  description = "🐙"
+  since_year = 2025
+  
+  # Posts Settings
+  [params.posts]
+    per_page = 6
+    default_cover = "/images/default-cover.jpg"
+  
+  # Feature Toggles
+  [params.features]
+    dark_mode = true
+    search = true
+    toc = true
+    wordcount = true
+    back_to_top = true
+  
+  # About Info
+  [params.about]
+    name = "OCTOPUS"
+    avatar = "https://avatars.githubusercontent.com/u/204014295?v=4"
+    description = "热爱技术，热爱生活。"
+    [[params.about.social]]
+      name = "github"
+      link = "https://github.com/octopusdims"
+      icon = "github"
+  
+  # Math Formulas (KaTeX)
+  [params.katex]
+    enable = true
+    cdn = "https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/"
+  
+  # Comments (Optional)
+  [params.comments]
+    enable = false
+    provider = "giscus"
+  
+  # Footer
+  [params.footer]
+    copyright = "OCTOPUS"
+    since = 2025
+    [params.footer.icp]
+      enable = false
+      text = ""
+      link = ""
+  
+  # Music Player (MetingJS)
+  [params.music]
+    enable = true
+    api = "https://beam-dana-illustrated-method.trycloudflare.com/api"
+    server = "netease"
+    type = "playlist"
+    id = "6016750085"
+    autoplay = false
+    fixed = true
+    mini = true
+    listFolded = true
+    order = "random"
+
+[menu]
+  [[menu.main]]
+    name = '主页'
+    url = '/'
+    weight = 10
+  [[menu.main]]
+    name = '归档'
+    url = '/archives'
+    weight = 20
+  [[menu.main]]
+    name = '相册'
+    url = '/gallery'
+    weight = 30
+  [[menu.main]]
+    name = '关于'
+    url = '/about'
+    weight = 40
+
+[taxonomies]
+  category = 'categories'
+  tag = 'tags'
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+  page = ["HTML"]
+  section = ["HTML", "RSS"]
+
+[outputFormats.JSON]
+  mediaType = "application/json"
+  baseName = "search"
+  isPlainText = true
+
+[permalinks]
+  posts = "/:year/:month/:day/:title/"
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+  [markup.highlight]
+    style = 'github-dark'
+    lineNos = false
+    codeFences = true
+    guessSyntax = true
+    noClasses = false
+

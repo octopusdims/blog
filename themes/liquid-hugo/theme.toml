@@ -1,0 +1,13 @@
+name = "Liquid"
+license = "MIT"
+licenselink = "https://github.com/yourname/hugo-theme-liquid/blob/main/LICENSE"
+description = "A modern, dark-themed Hugo blog theme with glass morphism effects"
+homepage = "https://github.com/yourname/hugo-theme-liquid"
+demosite = "https://demo.example.com"
+tags = ["blog", "dark", "glass", "modern", "responsive", "minimal"]
+features = ["blog", "categories", "tags", "search", "toc", "dark mode"]
+min_version = "0.118.0"
+
+[author]
+  name = "OCTOPUS"
+  homepage = "https://github.com/octopusdims"

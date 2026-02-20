@@ -1,0 +1,233 @@
+/* Code Blocks - Simple & Clean */
+
+/* Handle Hexo's figure.highlight structure */
+.post-content figure.highlight,
+.post-content .code-block {
+  margin: 1.5rem 0;
+  background: #0f172a;
+  border-radius: 18px;
+  overflow: visible;
+  position: relative;
+  font-family: 'Fira Code', 'JetBrains Mono', 'SF Mono', Consolas, 'Liberation Mono', Menlo, monospace;
+  padding-top: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 35px 60px -25px rgba(15, 23, 42, 0.8);
+}
+
+.post-content figure.highlight table,
+.post-content figure.highlight pre,
+.post-content .code-block pre {
+  display: block;
+  width: 100%;
+  margin: 0;
+  border: none;
+  overflow-x: auto;
+  white-space: pre;
+}
+
+.post-content figure.highlight tr,
+.post-content figure.highlight td,
+.post-content .code-block tr,
+.post-content .code-block td {
+  display: block;
+  border: none;
+  padding: 0;
+}
+
+.post-content figure.highlight pre,
+.post-content .code-block pre {
+  margin: 0;
+  background: transparent;
+  border-radius: 0;
+  position: relative;
+}
+
+.post-content figure.highlight pre code,
+.post-content .code-block pre code {
+  display: block;
+  padding: 1.15rem 1.4rem 1.4rem;
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: #e2e8f0;
+  overflow-x: auto;
+  background: transparent;
+}
+
+/* Ensure code doesn't wrap */
+.post-content figure.highlight pre code,
+.post-content .code-block pre code {
+  white-space: pre !important;
+  word-wrap: normal !important;
+  overflow-wrap: normal !important;
+}
+
+/* Toolbar */
+
+.code-toolbar {
+  position: absolute;
+  top: 0.5rem;
+  left: 1rem;
+  right: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  z-index: 5;
+}
+
+
+.code-lang-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.55rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(248, 250, 252, 0.8);
+  background: rgba(12, 18, 32, 0.8);
+  border: 1px solid rgba(248, 250, 252, 0.18);
+}
+
+.code-lang-label::before {
+  content: '';
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #22d3ee, #a855f7);
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.7);
+}
+
+/* Fallback for simple pre blocks */
+.post-content pre:not(figure.highlight pre) {
+  background: transparent;
+  margin: 0;
+}
+
+/* Copy button */
+.code-copy-btn {
+  padding: 0.2rem 0.55rem;
+  background: rgba(248, 250, 252, 0.18);
+  border: 1px solid rgba(248, 250, 252, 0.25);
+  border-radius: 10px;
+  color: #f8fafc;
+  font-size: 0.6rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.code-copy-btn svg {
+  width: 11px;
+  height: 11px;
+}
+
+.code-copy-btn:hover {
+  background: rgba(248, 250, 252, 0.38);
+  color: #0f172a;
+  border-color: rgba(248, 250, 252, 0.55);
+}
+
+.code-copy-btn.copied {
+  background: rgba(16, 185, 129, 0.35);
+  color: #022c22;
+  border-color: rgba(16, 185, 129, 0.55);
+}
+
+/* Scrollbar */
+.post-content pre::-webkit-scrollbar,
+.post-content pre code::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.post-content pre::-webkit-scrollbar-track,
+.post-content pre code::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+.post-content pre::-webkit-scrollbar-thumb,
+.post-content pre code::-webkit-scrollbar-thumb {
+  background: #45475a;
+  border-radius: 4px;
+}
+
+.post-content pre::-webkit-scrollbar-thumb:hover,
+.post-content pre code::-webkit-scrollbar-thumb:hover {
+  background: #585b70;
+}
+
+/* Firefox scrollbar */
+.post-content pre,
+.post-content pre code {
+  scrollbar-width: thin;
+  scrollbar-color: #45475a transparent;
+}
+
+/* Inline code */
+.post-content p code,
+.post-content li code {
+  padding: 0.2em 0.4em;
+  background: rgba(135, 131, 120, 0.12);
+  border-radius: 3px;
+  font-size: 0.875em;
+  color: #e45649;
+  font-family: 'SF Mono', Consolas, monospace;
+}
+
+/* Light mode */
+.light .post-content figure.highlight,
+.light .post-content .code-block {
+  background: #f6f8fb;
+  border-color: rgba(148, 163, 184, 0.3);
+  box-shadow: 0 15px 40px -18px rgba(15, 23, 42, 0.2);
+}
+
+.light .code-toolbar {
+  background: rgba(248, 250, 252, 0.85);
+  border-color: rgba(148, 163, 184, 0.35);
+}
+
+.light .code-lang-label {
+  color: rgba(15, 23, 42, 0.75);
+}
+
+.light .code-copy-btn {
+  background: rgba(15, 23, 42, 0.05);
+  border-color: rgba(15, 23, 42, 0.15);
+  color: #0f172a;
+}
+
+.light .code-copy-btn:hover {
+  background: rgba(15, 23, 42, 0.15);
+  color: #0f172a;
+}
+
+.light .post-content p code {
+  background: rgba(175, 184, 193, 0.2);
+  color: #cf222e;
+}
+
+/* Syntax Colors */
+.hljs-comment,
+.hljs-quote { color: #6c7086; font-style: italic; }
+.hljs-keyword,
+.hljs-selector-tag { color: #cba6f7; }
+.hljs-string { color: #a6e3a1; }
+.hljs-number { color: #fab387; }
+.hljs-function { color: #89b4fa; }
+.hljs-variable { color: #f38ba8; }
+.hljs-type { color: #f9e2af; }
+
+/* Light mode syntax */
+.light .hljs-comment { color: #6e7781; font-style: italic; }
+.light .hljs-keyword { color: #cf222e; }
+.light .hljs-string { color: #0a3069; }
+.light .hljs-number { color: #0550ae; }
+.light .hljs-function { color: #8250df; }

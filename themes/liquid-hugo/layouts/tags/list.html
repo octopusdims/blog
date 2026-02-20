@@ -1,0 +1,29 @@
+{{ define "main" }}
+<div class="page-tags">
+  <div class="container">
+    <header class="page-header">
+      <div class="page-icon kaomoji">(ﾉ◕ヮ◕)ﾉ</div>
+      <div class="tags-title-glass" data-liquid-glass="page-title">
+        <h1 class="page-title">标签</h1>
+      </div>
+      <p class="page-subtitle">共 {{ len .Data.Terms }} 个标签</p>
+    </header>
+    
+    {{ if .Data.Terms }}
+    <div class="tags-grid">
+      {{ range .Data.Terms.Alphabetical }}
+        <a href="{{ .Page.RelPermalink }}" class="tag-card">
+          <h2 class="tag-name">{{ .Page.Title }}</h2>
+          <span class="tag-count">{{ .Count }} 篇文章</span>
+        </a>
+      {{ end }}
+    </div>
+    {{ else }}
+    <div class="tags-empty">
+      <div class="tags-empty-icon kaomoji">(；′⌒`)</div>
+      <p>还没有标签呢，先去写点文章吧~</p>
+    </div>
+    {{ end }}
+  </div>
+</div>
+{{ end }}

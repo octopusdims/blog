@@ -1,0 +1,13 @@
+{{ range where .Site.RegularPages "Type" "posts" }}
+{{- $item := dict 
+  "title" .Title 
+  "url" .Permalink 
+  "date" (.Date.Format "2006-01-02")
+  "content" (.Plain | htmlEscape | truncate 500)
+  "categories" .Params.categories
+  "tags" .Params.tags
+-}}
+{{- $item | jsonify -}}
+{{- if ne (len (where $.Site.RegularPages "Type" "posts")) (add 1 ($.Scratch.Get "counter" | default 0)) -}},{{- end -}}
+{{- $.Scratch.Add "counter" 1 -}}
+{{ end }}

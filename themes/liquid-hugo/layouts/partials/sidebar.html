@@ -1,0 +1,82 @@
+<div class="sidebar-inner">
+  <!-- Blog Title Capsule -->
+  <div class="sidebar-card blog-title-card">
+    <a href="/" class="blog-title-link">
+      <span class="blog-title-text">{{ .Site.Params.suffix | default .Site.Title }}</span>
+    </a>
+  </div>
+
+  <div class="sidebar-card profile-card">
+    <div class="avatar">
+      <img src="{{ .Site.Params.about.avatar | relURL }}" alt="{{ .Site.Params.about.name }}">
+    </div>
+    <div class="profile-info">
+      <h3>{{ .Site.Params.about.name }}</h3>
+      <p>{{ .Site.Params.about.description }}</p>
+    </div>
+    <div class="profile-meta">
+      <span>Since {{ .Site.Params.since_year }}</span>
+      {{ with index .Site.Params.about.social 0 }}
+        <span>{{ .name }}</span>
+      {{ end }}
+    </div>
+  </div>
+
+  {{ if .Site.Taxonomies.categories }}
+  <div class="sidebar-card">
+    <h4 class="sidebar-title">
+      <a href="/categories/" class="sidebar-title-link">
+        <span class="title-icon">📁</span>
+        <span>分类</span>
+      </a>
+    </h4>
+    <ul class="sidebar-list">
+      {{ range .Site.Taxonomies.categories }}
+      <li>
+        <a href="{{ .Page.RelPermalink }}" class="sidebar-link">
+          <span class="link-name">{{ .Page.Title }}</span>
+          <span class="count">{{ .Count }}</span>
+        </a>
+      </li>
+      {{ end }}
+    </ul>
+  </div>
+  {{ end }}
+
+  {{ if gt (len .Site.Taxonomies.tags) 0 }}
+  <div class="sidebar-card">
+    <h4 class="sidebar-title">
+      <a href="/tags/" class="sidebar-title-link">
+        <span class="title-icon">🏷️</span>
+        <span>标签</span>
+      </a>
+    </h4>
+    <div class="tag-cloud-compact">
+      {{ range first 15 .Site.Taxonomies.tags.ByCount }}
+        <a href="{{ .Page.RelPermalink }}" class="tag-item-compact" title="{{ .Count }} 篇文章">
+          {{ .Page.Title }}
+        </a>
+      {{ end }}
+    </div>
+  </div>
+  {{ end }}
+
+  {{ if gt (len .Site.RegularPages) 0 }}
+  <div class="sidebar-card">
+    <h4 class="sidebar-title">
+      <span class="title-icon">📝</span>
+      <span>最近文章</span>
+    </h4>
+    <ul class="sidebar-list recent-posts">
+      {{ range first 5 (where .Site.RegularPages "Section" "posts").ByDate.Reverse }}
+      <li>
+        <a href="{{ .RelPermalink }}" class="sidebar-link recent-post-link">
+          <span class="link-name recent-post-title">{{ .Title }}</span>
+          <span class="date">{{ .Date.Format "01-02" }}</span>
+        </a>
+      </li>
+      {{ end }}
+    </ul>
+  </div>
+  {{ end }}
+</div>
