@@ -508,6 +508,11 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Drag start
     function dragStart(e) {
+      // Disable drag on touch devices (mobile)
+      if (e.type === 'touchstart') {
+        return;
+      }
+
       hasMoved = false;
       
       if (e.type === 'touchstart') {
