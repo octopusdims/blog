@@ -1,18 +1,27 @@
 /* Footer Styles - Liquid Glass Edition */
 .footer {
   position: relative;
-  padding: var(--space-3xl) 0;
-  margin: var(--space-xl) auto 0;
-  width: 90%;
+  padding: var(--space-2xl) var(--content-padding-x);
+  margin: var(--space-xl) auto var(--space-lg);
+  width: MIN(90%, calc(100% - var(--space-lg) * 2));
   min-height: 120px;
   background: transparent;
   backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: var(--radius-xl);
+  border-radius: 32px;
   box-shadow: 
     0 8px 32px rgba(0, 0, 0, 0.25),
     inset 0 1px 0 rgba(255, 255, 255, 0.05);
   overflow: hidden;
+}
+
+@media (max-width: 767px) {
+  .footer {
+    width: MIN(95%, calc(100% - var(--space-md) * 2));
+    padding: var(--space-xl) var(--space-md);
+    margin-bottom: calc(var(--space-lg) + env(safe-area-inset-bottom));
+  }
 }
 
 /* Ensure footer container has background */
@@ -23,7 +32,7 @@ body > .footer {
 
 /* WebGL Canvas for footer */
 .footer .liquid-glass-canvas {
-  border-radius: var(--radius-xl);
+  border-radius: 32px;
 }
 
 /* Mouse interaction state */
@@ -63,14 +72,14 @@ body > .footer {
 }
 
 .copyright {
-  font-size: 0.9375rem;
+  font-size: var(--text-sm);
   color: var(--text-secondary);
   margin: 0;
   font-weight: 500;
 }
 
 .powered {
-  font-size: 0.875rem;
+  font-size: var(--text-xs);
   color: var(--text-tertiary);
   margin: 0;
 }
@@ -85,7 +94,7 @@ body > .footer {
 }
 
 .footer-icp {
-  font-size: 0.8125rem;
+  font-size: var(--text-xs);
   color: var(--text-muted);
 }
 

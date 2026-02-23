@@ -87,8 +87,6 @@
   <div class="sidebar-overlay" id="sidebarOverlay"></div>
   
   <!-- Scripts -->
-  {{ $snow := resources.Get "js/snow-ground.js" | resources.Minify }}
-  <script src="{{ $snow.RelPermalink }}"></script>
   {{ $liquid := resources.Get "js/liquidGlass.js" | resources.Minify }}
   <script src="{{ $liquid.RelPermalink }}"></script>
   {{ $main := resources.Get "js/main.js" | resources.Minify }}

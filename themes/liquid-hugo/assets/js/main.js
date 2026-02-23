@@ -195,10 +195,16 @@ document.addEventListener('DOMContentLoaded', function() {
     heroSubtitle.title = 'Click to scroll to posts';
   }
   
-  // Tabs functionality
+  // Tabs functionality - Enhanced for mobile
   document.querySelectorAll('.tabs').forEach(tabsContainer => {
+    const navTabs = tabsContainer.querySelector('.nav-tabs');
     const buttons = tabsContainer.querySelectorAll('.nav-tabs .tab');
     const panes = tabsContainer.querySelectorAll('.tab-contents .tab-item-content');
+    
+    // Check if tabs are scrollable and add hint
+    if (navTabs && navTabs.scrollWidth > navTabs.clientWidth) {
+      navTabs.classList.add('scrollable');
+    }
     
     buttons.forEach((button, index) => {
       button.addEventListener('click', function() {
@@ -213,8 +219,38 @@ document.addEventListener('DOMContentLoaded', function() {
           void panes[index].offsetWidth;
           panes[index].classList.add('active');
         }
+        
+        // On mobile, scroll the active tab into view
+        if (window.innerWidth <= 767 && navTabs) {
+          const tabRect = this.getBoundingClientRect();
+          const navRect = navTabs.getBoundingClientRect();
+          const scrollLeft = navTabs.scrollLeft + tabRect.left - navRect.left - (navRect.width / 2) + (tabRect.width / 2);
+          
+          navTabs.scrollTo({
+            left: scrollLeft,
+            behavior: 'smooth'
+          });
+        }
       });
     });
+    
+    // Update scroll hint on scroll
+    if (navTabs) {
+      let scrollTimeout;
+      navTabs.addEventListener('scroll', function() {
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => {
+          const isScrollable = this.scrollWidth > this.clientWidth;
+          const isAtEnd = this.scrollLeft + this.clientWidth >= this.scrollWidth - 10;
+          
+          if (isScrollable && !isAtEnd) {
+            this.classList.add('scrollable');
+          } else {
+            this.classList.remove('scrollable');
+          }
+        }, 100);
+      }, { passive: true });
+    }
   });
   
 // Code block enhancements
@@ -354,7 +390,14 @@ document.addEventListener('DOMContentLoaded', function() {
     if (fabToggle) {
       fabToggle.classList.add('hidden');
     }
+    
+    // Prevent background scrolling using modern approach
     document.body.style.overflow = 'hidden';
+    // Add padding to prevent layout shift from scrollbar disappearance
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+    if (scrollbarWidth > 0) {
+      document.body.style.paddingRight = scrollbarWidth + 'px';
+    }
   }
   
   function closeSidebar() {
@@ -367,7 +410,10 @@ document.addEventListener('DOMContentLoaded', function() {
     if (fabToggle) {
       fabToggle.classList.remove('hidden');
     }
+    
+    // Restore scrolling
     document.body.style.overflow = '';
+    document.body.style.paddingRight = '';
   }
   
   if (sidebarClose) {
@@ -384,6 +430,55 @@ document.addEventListener('DOMContentLoaded', function() {
       closeSidebar();
     }
   });
+  
+  // Swipe to close sidebar (left swipe - drawer slides from left)
+  if (sidebarDrawer) {
+    let touchStartX = 0;
+    let touchCurrentX = 0;
+    let isSwiping = false;
+    
+    sidebarDrawer.addEventListener('touchstart', function(e) {
+      touchStartX = e.touches[0].clientX;
+      touchCurrentX = touchStartX;
+      isSwiping = true;
+      sidebarDrawer.style.transition = 'none';
+    }, { passive: true });
+    
+    sidebarDrawer.addEventListener('touchmove', function(e) {
+      if (!isSwiping) return;
+      
+      touchCurrentX = e.touches[0].clientX;
+      const deltaX = touchCurrentX - touchStartX;
+      
+      // Only allow swiping left (negative delta) to close
+      if (deltaX < 0) {
+        sidebarDrawer.style.transform = `translateX(${deltaX}px)`;
+      }
+    }, { passive: true });
+    
+    sidebarDrawer.addEventListener('touchend', function(e) {
+      if (!isSwiping) return;
+      
+      isSwiping = false;
+      sidebarDrawer.style.transition = '';
+      sidebarDrawer.style.transform = '';
+      
+      const deltaX = touchCurrentX - touchStartX;
+      const threshold = -80; // Swipe 80px left to close
+      
+      if (deltaX < threshold) {
+        closeSidebar();
+      }
+    }, { passive: true });
+    
+    sidebarDrawer.addEventListener('touchcancel', function(e) {
+      if (!isSwiping) return;
+      
+      isSwiping = false;
+      sidebarDrawer.style.transition = '';
+      sidebarDrawer.style.transform = '';
+    }, { passive: true });
+  }
   
   // Draggable FAB - Liquid Glass Style
   if (fabToggle) {
@@ -831,7 +926,10 @@ document.addEventListener('DOMContentLoaded', function() {
           if (currentPlayingPlayer && currentPlayingPlayer !== audio) {
             currentPlayingPlayer.pause();
             const otherPlayer = currentPlayingPlayer.closest('.glass-music-player');
-            if (otherPlayer) otherPlayer.classList.remove('is-playing');
+            if (otherPlayer) {
+              otherPlayer.classList.remove('is-playing');
+              otherPlayer.classList.remove('is-loading');
+            }
           }
           
           audio.play();
@@ -840,6 +938,7 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
           audio.pause();
           player.classList.remove('is-playing');
+          player.classList.remove('is-loading');
           if (currentPlayingPlayer === audio) currentPlayingPlayer = null;
         }
       });
@@ -984,4 +1083,78 @@ document.addEventListener('DOMContentLoaded', function() {
       volumeFill.style.width = '70%';
     });
   })();
+  
+  // ========================================
+  // Mobile Interaction Enhancements (Phase 4)
+  // ========================================
+  
+  // 1. Touch feedback for interactive elements
+  const touchElements = document.querySelectorAll('a, button, .post-card, .category-card, .tag-card, .moment-card');
+  touchElements.forEach(el => {
+    el.addEventListener('touchstart', function() {
+      this.style.transform = 'scale(0.98)';
+    }, { passive: true });
+    
+    el.addEventListener('touchend', function() {
+      this.style.transform = '';
+    }, { passive: true });
+    
+    el.addEventListener('touchcancel', function() {
+      this.style.transform = '';
+    }, { passive: true });
+  });
+  
+  // 2. Prevent double-tap zoom on mobile
+  let lastTouchEnd = 0;
+  document.addEventListener('touchend', function(e) {
+    const now = Date.now();
+    if (now - lastTouchEnd <= 300) {
+      e.preventDefault();
+    }
+    lastTouchEnd = now;
+  }, { passive: false });
+  
+  // 3. Optimize scroll performance on mobile
+  if ('ontouchstart' in window) {
+    document.body.classList.add('touch-device');
+  }
+  
+  // 4. Pull-to-refresh prevention for sidebar drawer
+  if (sidebarDrawer) {
+    sidebarDrawer.addEventListener('touchmove', function(e) {
+      if (this.scrollTop === 0 && e.touches[0].clientY > e.touches[0].screenY) {
+        e.preventDefault();
+      }
+    }, { passive: false });
+  }
+  
+  // 5. Active state management for mobile nav
+  const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+  mobileNavLinks.forEach(link => {
+    link.addEventListener('click', function() {
+      mobileNavLinks.forEach(l => l.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+  
+  // 6. Orientation change handler
+  window.addEventListener('orientationchange', function() {
+    // Close sidebar on orientation change to prevent layout issues
+    if (sidebarDrawer && sidebarDrawer.classList.contains('active')) {
+      closeSidebar();
+    }
+    
+    // Reset FAB position
+    if (fabToggle) {
+      fabToggle.style.transform = '';
+    }
+  });
+  
+  // 7. Visibility change handler (save/restore state)
+  document.addEventListener('visibilitychange', function() {
+    if (document.hidden && sidebarDrawer && sidebarDrawer.classList.contains('active')) {
+      // Optional: close sidebar when app is backgrounded
+      // closeSidebar();
+    }
+  });
 });

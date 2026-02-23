@@ -6,6 +6,12 @@
   animation: archive-page-fade-in 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
+@media (max-width: 767px) {
+  .page-archive {
+    padding: calc(var(--header-height) + var(--space-xl)) 0 var(--space-2xl);
+  }
+}
+
 @keyframes archive-page-fade-in {
   to { opacity: 1; }
 }
@@ -18,18 +24,22 @@
   animation: archive-header-reveal 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s forwards;
 }
 
-@keyframes archive-header-reveal {
-  to {
-    opacity: 1;
+@media (max-width: 767px) {
+  .page-header {
+    margin-bottom: var(--space-2xl);
   }
+}
+
+@keyframes archive-header-reveal {
+  to { opacity: 1; }
 }
 
 /* Archive Title - Liquid Glass Effect with Text Mask */
 .archive-title-glass {
   position: relative;
   display: inline-block;
-  width: 140px;
-  height: 80px;
+  width: Min(140px, 30vw);
+  height: Clamp(50px, 12vw, 80px);
   margin-bottom: var(--space-sm);
   filter: drop-shadow(0 0 50px rgba(167, 139, 250, 0.6));
   -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 140 80'%3E%3Ctext x='50%25' y='60%25' dominant-baseline='middle' text-anchor='middle' font-size='56' font-weight='800' font-family='Inter, system-ui, -apple-system, sans-serif' fill='white' style='letter-spacing: -0.03em;'%3E%E5%BD%92%E6%A1%A3%3C/text%3E%3C/svg%3E");
@@ -48,7 +58,7 @@
   50% { transform: translateY(-6px); }
 }
 
-/* Canvas 填满容器 */
+/* Canvas fills container */
 .archive-title-glass .liquid-glass-canvas {
   position: absolute;
   top: 0;
@@ -62,7 +72,7 @@
   position: relative;
   z-index: 1;
   opacity: 0 !important;
-  font-size: 3rem;
+  font-size: var(--text-3xl);
   font-weight: 800;
   letter-spacing: -0.03em;
   margin: 0;
@@ -73,7 +83,7 @@
 
 /* Page Subtitle */
 .page-subtitle {
-  font-size: 1.125rem;
+  font-size: var(--text-lg);
   color: var(--text-secondary);
   opacity: 0;
   animation: subtitle-reveal 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.5s forwards;
@@ -85,7 +95,7 @@
 
 /* Timeline Container */
 .archive-timeline {
-  max-width: 720px;
+  max-width: Min(720px, 90vw);
   margin: 0 auto;
 }
 
@@ -101,7 +111,14 @@
   box-shadow: var(--glass-shadow);
   opacity: 0;
   transform: translateY(30px);
-  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all var(--transition-slow);
+}
+
+@media (max-width: 767px) {
+  .archive-year {
+    margin-bottom: var(--space-xl);
+    padding: var(--space-lg);
+  }
 }
 
 .archive-year.animate-in {
@@ -122,13 +139,20 @@
 
 /* Year Title */
 .year-title {
-  font-size: 1.75rem;
+  font-size: var(--text-xl);
   font-weight: 700;
   margin-bottom: var(--space-lg);
   color: var(--text-primary);
   letter-spacing: -0.02em;
   position: relative;
   padding-left: var(--space-lg);
+}
+
+@media (max-width: 767px) {
+  .year-title {
+    font-size: var(--text-lg);
+    margin-bottom: var(--space-md);
+  }
 }
 
 .year-title::before {
@@ -153,6 +177,14 @@
   transition: all var(--transition-fast);
 }
 
+@media (max-width: 640px) {
+  .archive-item {
+    flex-direction: column;
+    gap: var(--space-xs);
+    padding: var(--space-sm) 0;
+  }
+}
+
 .archive-item:last-child {
   border-bottom: none;
 }
@@ -162,58 +194,35 @@
 }
 
 .archive-date {
-  font-size: 0.9375rem;
+  font-size: var(--text-sm);
   font-weight: 500;
   color: var(--text-tertiary);
   min-width: 70px;
   flex-shrink: 0;
 }
 
+@media (max-width: 640px) {
+  .archive-date {
+    font-size: var(--text-xs);
+  }
+}
+
 .archive-title {
-  font-size: 1.0625rem;
+  font-size: var(--text-base);
   font-weight: 500;
   color: var(--text-primary);
   transition: color var(--transition-fast);
   text-decoration: none;
 }
 
-.archive-title:hover {
-  color: var(--accent-color);
+@media (max-width: 640px) {
+  .archive-title {
+    font-size: var(--text-sm);
+  }
 }
 
-/* Responsive */
-@media (max-width: 640px) {
-  .page-archive {
-    padding: var(--space-2xl) 0;
-  }
-  
-  .archive-title-glass {
-    width: 100px;
-    height: 60px;
-    filter: drop-shadow(0 0 40px rgba(167, 139, 250, 0.5));
-    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'%3E%3Ctext x='50%25' y='60%25' dominant-baseline='middle' text-anchor='middle' font-size='42' font-weight='800' font-family='Inter, system-ui, -apple-system, sans-serif' fill='white' style='letter-spacing: -0.03em;'%3E%E5%BD%92%E6%A1%A3%3C/text%3E%3C/svg%3E");
-    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'%3E%3Ctext x='50%25' y='60%25' dominant-baseline='middle' text-anchor='middle' font-size='42' font-weight='800' font-family='Inter, system-ui, -apple-system, sans-serif' fill='white' style='letter-spacing: -0.03em;'%3E%E5%BD%92%E6%A1%A3%3C/text%3E%3C/svg%3E");
-  }
-  
-  .archive-title-glass .page-title {
-    font-size: 2.25rem;
-    opacity: 0 !important;
-    background: none !important;
-  }
-  
-  .archive-year {
-    padding: var(--space-lg);
-    margin-bottom: var(--space-2xl);
-  }
-  
-  .archive-item {
-    flex-direction: column;
-    gap: var(--space-xs);
-  }
-  
-  .archive-date {
-    font-size: 0.875rem;
-  }
+.archive-title:hover {
+  color: var(--accent-color);
 }
 
 /* Reduced motion preference */

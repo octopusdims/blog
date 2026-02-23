@@ -14,6 +14,13 @@
   box-shadow: 0 35px 60px -25px rgba(15, 23, 42, 0.8);
 }
 
+/* Ensure horizontal scroll on mobile */
+.post-content figure.highlight,
+.post-content .code-block {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 .post-content figure.highlight table,
 .post-content figure.highlight pre,
 .post-content .code-block pre {
@@ -62,7 +69,6 @@
 }
 
 /* Toolbar */
-
 .code-toolbar {
   position: absolute;
   top: 0.5rem;
@@ -74,7 +80,6 @@
   gap: 0.5rem;
   z-index: 5;
 }
-
 
 .code-lang-label {
   display: inline-flex;
@@ -181,37 +186,19 @@
   font-family: 'SF Mono', Consolas, monospace;
 }
 
-/* Light mode */
-.light .post-content figure.highlight,
-.light .post-content .code-block {
-  background: #f6f8fb;
-  border-color: rgba(148, 163, 184, 0.3);
-  box-shadow: 0 15px 40px -18px rgba(15, 23, 42, 0.2);
-}
-
-.light .code-toolbar {
-  background: rgba(248, 250, 252, 0.85);
-  border-color: rgba(148, 163, 184, 0.35);
-}
-
-.light .code-lang-label {
-  color: rgba(15, 23, 42, 0.75);
-}
-
-.light .code-copy-btn {
-  background: rgba(15, 23, 42, 0.05);
-  border-color: rgba(15, 23, 42, 0.15);
-  color: #0f172a;
-}
-
-.light .code-copy-btn:hover {
-  background: rgba(15, 23, 42, 0.15);
-  color: #0f172a;
-}
-
-.light .post-content p code {
-  background: rgba(175, 184, 193, 0.2);
-  color: #cf222e;
+/* Mobile adjustments */
+@media (max-width: 767px) {
+  .post-content figure.highlight,
+  .post-content .code-block {
+    margin: 2rem 0;
+    border-radius: 14px;
+  }
+  
+  .post-content figure.highlight pre code,
+  .post-content .code-block pre code {
+    padding: 1rem;
+    font-size: 0.85rem;
+  }
 }
 
 /* Syntax Colors */
@@ -224,10 +211,3 @@
 .hljs-function { color: #89b4fa; }
 .hljs-variable { color: #f38ba8; }
 .hljs-type { color: #f9e2af; }
-
-/* Light mode syntax */
-.light .hljs-comment { color: #6e7781; font-style: italic; }
-.light .hljs-keyword { color: #cf222e; }
-.light .hljs-string { color: #0a3069; }
-.light .hljs-number { color: #0550ae; }
-.light .hljs-function { color: #8250df; }

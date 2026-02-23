@@ -1,36 +1,36 @@
 /* 404 Error Page - Fun & Animated */
 
-/* 确保404页面的main区域占满视口 */
+/* Ensure 404 page main area fills viewport */
 body:has(.error-page) .main {
-  min-height: calc(100vh - var(--header-height, 80px));
+  min-height: calc(100dvh - var(--header-height));
   padding-bottom: 0;
 }
 
 body:has(.error-page) .layout-full {
-  min-height: calc(100vh - var(--header-height, 80px));
+  min-height: calc(100dvh - var(--header-height));
 }
 
 body:has(.error-page) .content-full {
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - var(--header-height, 80px));
+  min-height: calc(100dvh - var(--header-height));
 }
 
-/* 404页面容器 */
+/* 404 Page Container */
 .error-page {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   flex: 1;
-  min-height: calc(100vh - var(--header-height, 80px) - 160px);
-  padding: 2rem 1rem;
+  min-height: calc(100dvh - var(--header-height) - var(--space-4xl));
+  padding: var(--space-xl) var(--content-padding-x);
   box-sizing: border-box;
   position: relative;
   overflow: hidden;
 }
 
-/* 漂浮装饰元素 */
+/* Floating Decorations */
 .floating-shapes {
   position: absolute;
   inset: 0;
@@ -42,10 +42,16 @@ body:has(.error-page) .content-full {
   position: absolute;
   left: var(--x);
   top: var(--y);
-  font-size: 1.5rem;
+  font-size: var(--text-xl);
   color: rgba(167, 139, 250, 0.3);
   animation: floatShape 6s ease-in-out infinite;
   animation-delay: var(--delay);
+}
+
+@media (max-width: 767px) {
+  .shape {
+    font-size: var(--text-base);
+  }
 }
 
 @keyframes floatShape {
@@ -59,36 +65,32 @@ body:has(.error-page) .content-full {
   }
 }
 
-/* 错误容器 */
+/* Error Container */
 .error-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2rem;
+  gap: var(--space-xl);
   position: relative;
   z-index: 1;
 }
 
-/* 404 包装器 - 带浮动动画 */
+/* 404 Wrapper with Float Animation */
 .error-glass-wrapper {
   position: relative;
   animation: float404 4s ease-in-out infinite;
 }
 
 @keyframes float404 {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
 }
 
-/* 404 液体玻璃文字 */
+/* 404 Liquid Glass Text */
 .error-glass-text {
   position: relative;
-  width: 340px;
-  height: 160px;
+  width: Min(340px, 70vw);
+  height: Clamp(90px, 20vw, 160px);
   filter: drop-shadow(0 0 60px rgba(167, 139, 250, 0.6));
   -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 340 160'%3E%3Ctext x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-size='130' font-weight='800' font-family='Inter, system-ui, -apple-system, sans-serif' fill='white' style='letter-spacing: -0.04em;'%3E404%3C/text%3E%3C/svg%3E");
   mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 340 160'%3E%3Ctext x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-size='130' font-weight='800' font-family='Inter, system-ui, -apple-system, sans-serif' fill='white' style='letter-spacing: -0.04em;'%3E404%3C/text%3E%3C/svg%3E");
@@ -100,7 +102,7 @@ body:has(.error-page) .content-full {
   mask-repeat: no-repeat;
 }
 
-/* Canvas 填满容器 */
+/* Canvas fills container */
 .error-glass-text .liquid-glass-canvas {
   position: absolute;
   top: 0;
@@ -109,14 +111,14 @@ body:has(.error-page) .content-full {
   height: 100% !important;
 }
 
-/* 装饰光环 */
+/* Glow Ring */
 .glow-ring {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 400px;
-  height: 200px;
+  width: Min(400px, 80vw);
+  height: Min(200px, 40vw);
   border: 1px solid rgba(167, 139, 250, 0.2);
   border-radius: 50%;
   animation: pulseRing 3s ease-in-out infinite;
@@ -134,22 +136,28 @@ body:has(.error-page) .content-full {
   }
 }
 
-/* 信息区域 */
+/* Info Area */
 .error-info {
   text-align: center;
-  max-width: 400px;
+  max-width: Min(400px, 90vw);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.75rem;
+  gap: var(--space-sm);
 }
 
-/* 表情图标 */
+/* Error Icon */
 .error-icon {
-  font-size: 2rem;
+  font-size: var(--text-2xl);
   color: var(--text-secondary);
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--space-xs);
   animation: wiggle 2s ease-in-out infinite;
+}
+
+@media (max-width: 767px) {
+  .error-icon {
+    font-size: var(--text-xl);
+  }
 }
 
 @keyframes wiggle {
@@ -157,35 +165,47 @@ body:has(.error-page) .content-full {
   50% { transform: rotate(3deg); }
 }
 
-/* 错误信息标题 */
+/* Error Message Title */
 .error-message {
-  font-size: 1.75rem;
+  font-size: var(--text-xl);
   font-weight: 700;
   margin: 0;
   color: var(--text-primary);
   letter-spacing: -0.02em;
 }
 
-/* 错误描述 */
-.error-description {
-  font-size: 1rem;
-  color: var(--text-secondary);
-  margin: 0 0 1rem;
-  line-height: 1.7;
+@media (max-width: 767px) {
+  .error-message {
+    font-size: var(--text-lg);
+  }
 }
 
-/* 返回首页按钮 - Liquid Glass */
+/* Error Description */
+.error-description {
+  font-size: var(--text-base);
+  color: var(--text-secondary);
+  margin: 0 0 var(--space-md);
+  line-height: var(--leading-normal);
+}
+
+@media (max-width: 767px) {
+  .error-description {
+    font-size: var(--text-sm);
+  }
+}
+
+/* Back to Home Button - Liquid Glass */
 .error-back {
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   padding: 1px;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   text-decoration: none;
   border: 1px solid rgba(255, 255, 255, 0.12);
   box-shadow: 0 6px 24px rgba(139, 92, 246, 0.25);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all var(--transition-normal);
   overflow: hidden;
 }
 
@@ -194,91 +214,34 @@ body:has(.error-page) .content-full {
   box-shadow: 0 10px 32px rgba(139, 92, 246, 0.35);
 }
 
-/* 按钮内容层 - 在canvas之上 */
+/* Button content layer */
 .back-content {
   position: relative;
   z-index: 2;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.75rem;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-lg);
   color: white;
   font-weight: 500;
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
   pointer-events: none;
 }
 
 .back-content svg {
   width: 16px;
   height: 16px;
-  transition: transform 0.25s ease;
+  transition: transform var(--transition-fast);
 }
 
 .error-back:hover .back-content svg {
   transform: translateX(-2px);
 }
 
-/* 响应式适配 */
-@media (max-width: 768px) {
-  .shape {
-    font-size: 1rem;
-  }
-  
-  .error-glass-text {
-    width: 240px;
-    height: 110px;
-    filter: drop-shadow(0 0 40px rgba(167, 139, 250, 0.5));
-  }
-  
-  .glow-ring {
-    width: 280px;
-    height: 140px;
-  }
-  
-  .error-container {
-    gap: 1.5rem;
-  }
-  
-  .error-icon {
-    font-size: 1.5rem;
-  }
-  
-  .error-message {
-    font-size: 1.375rem;
-  }
-  
-  .error-description {
-    font-size: 0.9375rem;
-  }
-  
-  .error-back {
-    padding: 0.625rem 1.5rem;
-    font-size: 0.8125rem;
-  }
-  
-  .error-page {
-    min-height: calc(100vh - var(--header-height, 80px) - 140px);
-  }
-}
-
-@media (max-width: 480px) {
-  .error-glass-text {
-    width: 200px;
-    height: 90px;
-    filter: drop-shadow(0 0 30px rgba(167, 139, 250, 0.4));
-  }
-  
-  .glow-ring {
-    width: 240px;
-    height: 120px;
-  }
-  
-  .error-icon {
-    font-size: 1.25rem;
-  }
-  
-  .error-message {
-    font-size: 1.25rem;
+@media (max-width: 767px) {
+  .back-content {
+    padding: var(--space-sm) var(--space-md);
+    font-size: var(--text-xs);
   }
 }

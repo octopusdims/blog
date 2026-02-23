@@ -1,46 +1,47 @@
-/* Tables - Simple */
+/* Tables - Responsive with Wrapper */
+
+/* Table wrapper for horizontal scroll on mobile */
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: var(--space-lg) 0;
+  border-radius: var(--radius-lg);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+}
+
+/* Ensure tables inside wrapper don't overflow */
+.table-wrapper table {
+  margin: 0;
+  min-width: 100%;
+}
 
 .post-content table {
   width: 100%;
-  margin: 1.5rem 0;
   border-collapse: collapse;
-  font-size: 0.9375rem;
+  font-size: var(--text-sm);
 }
 
 .post-content th,
 .post-content td {
-  padding: 0.75rem 1rem;
+  padding: var(--space-sm) var(--space-md);
   text-align: left;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .post-content th {
   font-weight: 600;
-  color: #374151;
-  background: #f9fafb;
+  color: var(--text-primary);
+  background: var(--bg-secondary);
 }
 
 .post-content td {
-  color: #4b5563;
+  color: var(--text-secondary);
 }
 
 .post-content tr:last-child td {
   border-bottom: none;
-}
-
-/* Dark mode */
-.dark .post-content th,
-.dark .post-content td {
-  border-bottom-color: #374151;
-}
-
-.dark .post-content th {
-  color: #e5e7eb;
-  background: #1f2937;
-}
-
-.dark .post-content td {
-  color: #d1d5db;
 }
 
 /* KaTeX in tables */
@@ -49,15 +50,37 @@
 }
 
 /* Responsive */
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .post-content table {
     display: block;
     overflow-x: auto;
+    font-size: var(--text-xs);
   }
   
   .post-content th,
   .post-content td {
-    padding: 0.5rem 0.75rem;
-    font-size: 0.875rem;
+    padding: var(--space-xs) var(--space-sm);
+  }
+}
+
+/* Touch device optimization */
+@media (pointer: coarse) {
+  .table-wrapper {
+    /* Show scrollbar on touch devices */
+    scrollbar-width: thin;
+    scrollbar-color: var(--glass-border) transparent;
+  }
+  
+  .table-wrapper::-webkit-scrollbar {
+    height: 6px;
+  }
+  
+  .table-wrapper::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .table-wrapper::-webkit-scrollbar-thumb {
+    background: var(--glass-border);
+    border-radius: 3px;
   }
 }

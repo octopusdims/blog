@@ -394,15 +394,18 @@
     const presets = {
       header: {
         baseColor: [0.13, 0.14, 0.18], // Lighter blue-purple
-        cornerRadius: 24.0
+        cornerRadius: 36.0,
+        responsive: true
       },
       card: {
         baseColor: [0.14, 0.15, 0.19], // Lighter blue-purple
-        cornerRadius: 28.0
+        cornerRadius: 36.0,
+        responsive: true // Enable responsive radius for cards
       },
       footer: {
         baseColor: [0.12, 0.13, 0.17], // Lighter blue-purple
-        cornerRadius: 24.0
+        cornerRadius: 36.0,
+        responsive: true
       },
       'error-code': {
         baseColor: [0.65, 0.45, 0.90], // Bright violet like OCTOPUS text
@@ -431,11 +434,25 @@
       'term-title': {
         baseColor: [0.72, 0.52, 0.96], // Bright violet like other pages
         cornerRadius: 20.0
+      },
+      moment: {
+        baseColor: [0.14, 0.15, 0.19], // Same as card
+        cornerRadius: 36.0,
+        responsive: true
       }
     };
     
     const preset = presets[options.preset] || presets.card;
     const config = { ...preset, ...options };
+    
+    // Apply responsive corner radius if needed
+    function updateCornerRadius() {
+      if (config.responsive) {
+        const isMobile = window.innerWidth <= 767;
+        config.cornerRadius = isMobile ? preset.cornerRadius * 0.75 : preset.cornerRadius;
+      }
+    }
+    updateCornerRadius();
     
     let mouse = { x: 0.5, y: 0.5 };
     let targetMouse = { x: 0.5, y: 0.5 };
@@ -512,7 +529,10 @@
     }
     
     render();
-    window.addEventListener('resize', resize);
+    window.addEventListener('resize', () => {
+      updateCornerRadius();
+      resize();
+    });
     
     // Use ResizeObserver to handle dynamic size changes
     const resizeObserver = new ResizeObserver((entries) => {

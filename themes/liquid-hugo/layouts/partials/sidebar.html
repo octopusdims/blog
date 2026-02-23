@@ -1,11 +1,12 @@
 <div class="sidebar-inner">
-  <!-- Blog Title Capsule -->
+  <!-- 1. Blog Title Capsule -->
   <div class="sidebar-card blog-title-card">
     <a href="/" class="blog-title-link">
       <span class="blog-title-text">{{ .Site.Params.suffix | default .Site.Title }}</span>
     </a>
   </div>
 
+  <!-- 2. Profile Card - Personal Brand -->
   <div class="sidebar-card profile-card">
     <div class="avatar">
       <img src="{{ .Site.Params.about.avatar | relURL }}" alt="{{ .Site.Params.about.name }}">
@@ -20,8 +21,20 @@
         <span>{{ .name }}</span>
       {{ end }}
     </div>
+    <!-- Mobile Navigation Menu - Quick Access (moved into profile card) -->
+    <nav class="mobile-nav">
+      {{ range .Site.Menus.main }}
+      <a href="{{ .URL }}" class="mobile-nav-link{{ if $.IsMenuCurrent "main" . }} active{{ end }}{{ if $.HasMenuCurrent "main" . }} active{{ end }}">
+        <span class="mobile-nav-icon">
+          {{ if eq .Name "归档" }}📁{{ else if eq .Name "相册" }}🖼️{{ else if eq .Name "日志" }}📝{{ else if eq .Name "关于" }}👤{{ else }}•{{ end }}
+        </span>
+        <span>{{ .Name }}</span>
+      </a>
+      {{ end }}
+    </nav>
   </div>
 
+  <!-- 4. Categories -->
   {{ if .Site.Taxonomies.categories }}
   <div class="sidebar-card">
     <h4 class="sidebar-title">
@@ -43,6 +56,7 @@
   </div>
   {{ end }}
 
+  <!-- 5. Tags -->
   {{ if gt (len .Site.Taxonomies.tags) 0 }}
   <div class="sidebar-card">
     <h4 class="sidebar-title">
@@ -61,6 +75,7 @@
   </div>
   {{ end }}
 
+  <!-- 6. Recent Posts -->
   {{ if gt (len .Site.RegularPages) 0 }}
   <div class="sidebar-card">
     <h4 class="sidebar-title">

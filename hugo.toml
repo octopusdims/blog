@@ -59,10 +59,6 @@ enableGitInfo = false
 
 [menu]
   [[menu.main]]
-    name = '主页'
-    url = '/'
-    weight = 10
-  [[menu.main]]
     name = '归档'
     url = '/archives'
     weight = 20

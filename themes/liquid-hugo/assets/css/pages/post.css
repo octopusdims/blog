@@ -1,21 +1,20 @@
 /* Post Page - Ultra-Wide Fluid Layout */
 
-/* 1. Global Layout Container: remove rigid centering, use fluid layout */
+/* 1. Global Layout Container */
 .post-header,
 .post-body,
 .post-footer {
-  width: 96%; /* Use 96% of screen width */
-  max-width: 2400px; /* Upper limit for ultra-wide screens */
+  width: Min(96%, calc(100% - var(--space-lg) * 2));
+  max-width: var(--container-max);
   margin: 0 auto;
   box-sizing: border-box;
 }
 
-/* 2. Unified Alignment Baseline (key adjustment) */
-/* TOC width(240px) + gap(80px) = 320px */
-@media (min-width: 1025px) {
+/* 2. Unified Alignment Baseline */
+@media (min-width: 1024px) {
   .post-header,
   .post-footer {
-    padding-left: 320px; 
+    padding-left: calc(var(--sidebar-width) + var(--space-2xl));
     text-align: left;
   }
   
@@ -24,27 +23,41 @@
   }
 }
 
-/* 3. Header Area: more bold and powerful */
+/* 3. Header Area */
 .post-header {
-  padding-top: 80px;
-  margin-bottom: 60px;
+  padding-top: calc(var(--header-height) + var(--space-xl));
+  margin-bottom: var(--space-2xl);
+}
+
+@media (max-width: 767px) {
+  .post-header {
+    padding-top: calc(var(--header-height) + var(--space-lg));
+    margin-bottom: var(--space-xl);
+  }
 }
 
 .post-title {
-  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-size: var(--text-4xl);
   font-weight: 800;
-  line-height: 1.2;
+  line-height: var(--leading-tight);
   letter-spacing: -0.02em;
   color: var(--text-primary);
-  margin-bottom: 2rem;
+  margin-bottom: var(--space-lg);
   max-width: 900px;
   text-wrap: balance;
 }
 
+@media (max-width: 767px) {
+  .post-title {
+    font-size: var(--text-3xl);
+  }
+}
+
 .post-meta {
   display: flex;
-  gap: 2.5rem;
-  font-size: 1.1rem;
+  flex-wrap: wrap;
+  gap: Clamp(var(--space-md), #{2vw}, var(--space-xl));
+  font-size: var(--text-base);
   color: var(--text-secondary);
 }
 
@@ -52,68 +65,84 @@
 .post-body {
   display: flex;
   align-items: flex-start;
-  gap: 80px;
+  gap: Clamp(var(--space-xl), #{5vw}, 80px);
 }
 
 .post-toc {
-  width: 240px;
+  width: var(--sidebar-width);
   flex-shrink: 0;
   position: sticky;
-  top: 100px;
-  max-height: calc(100vh - 140px);
+  top: calc(var(--header-height) + var(--space-lg));
+  max-height: calc(100dvh - var(--header-height) - var(--space-xl));
   background: var(--glass-bg);
   backdrop-filter: blur(30px) saturate(200%);
+  -webkit-backdrop-filter: blur(30px) saturate(200%);
   border: 1px solid var(--glass-border);
-  border-radius: 16px;
-  padding: 1.25rem;
-  font-size: 0.85rem;
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  font-size: var(--text-sm);
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 
 .post-body .post-content {
-  flex: 1; /* Occupy all remaining space */
+  flex: 1;
   min-width: 0;
-  max-width: 1800px; /* Further widen content for code and images */
-  font-size: 1.25rem;
-  line-height: 1.9;
+  max-width: var(--container-wide);
+  font-size: Clamp(1rem, 1.5vw, 1.25rem);
+  line-height: var(--leading-relaxed);
 }
 
 /* 5. Content Heading Styles */
 .post-content h1 { 
-  font-size: 3rem; 
-  margin: 4rem 0 2rem; 
-  border-bottom: 3px solid var(--border-color); 
-  padding-bottom: 1rem; 
+  font-size: var(--h2-size);
+  margin: var(--space-3xl) 0 var(--space-lg);
+  border-bottom: 3px solid var(--border-color);
+  padding-bottom: var(--space-md);
 }
-.post-content h2 { font-size: 2.2rem; margin: 3.5rem 0 1.5rem; }
-.post-content h3 { font-size: 1.7rem; margin: 2.5rem 0 1.2rem; }
+
+.post-content h2 { 
+  font-size: var(--h3-size);
+  margin: var(--space-2xl) 0 var(--space-lg);
+}
+
+.post-content h3 { 
+  font-size: var(--h4-size);
+  margin: var(--space-xl) 0 var(--space-md);
+}
 
 /* 6. Footer Area */
 .post-footer {
-  margin-top: 100px;
-  padding: 60px 0;
+  margin-top: var(--space-4xl);
+  padding: var(--space-2xl) 0;
   border-top: 1px solid var(--border-color);
 }
 
-/* 7. Tag Styles - Pill Shape */
+/* 7. Tag Styles */
 .post-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
+  gap: var(--space-sm);
+  justify-content: center;
+}
+
+@media (min-width: 1024px) {
+  .post-tags {
+    justify-content: flex-start;
+  }
 }
 
 .tag-link {
   display: inline-block;
-  font-size: 0.875rem;
-  padding: 0.4rem 1rem;
+  font-size: var(--text-sm);
+  padding: var(--space-xs) var(--space-md);
   background: rgba(139, 92, 246, 0.15);
   border: 1px solid rgba(139, 92, 246, 0.3);
-  border-radius: 9999px;
+  border-radius: var(--radius-full);
   color: var(--accent-color);
   text-decoration: none;
-  transition: all 0.2s ease;
+  transition: all var(--transition-fast);
 }
 
 .tag-link:hover {
@@ -122,41 +151,45 @@
   transform: translateY(-2px);
 }
 
-/* 8. Responsive Fallback: auto-center on small screens */
-@media (max-width: 1400px) {
-  .post-body { gap: 50px; }
-  .post-header, .post-footer { padding-left: 290px; } /* Reduce padding to match gap */
-}
-
-@media (max-width: 1200px) {
-  .post-header, .post-footer { padding-left: 0; text-align: center; }
-  .post-meta { justify-content: center; }
-  .post-body .post-content { max-width: 850px; margin: 0 auto; }
-  .post-toc { display: none; }
+/* 8. Responsive: hide TOC on small screens */
+@media (max-width: 1023px) {
+  .post-header, 
+  .post-footer {
+    padding-left: 0;
+    text-align: center;
+  }
   
-  .post-tags {
+  .post-meta {
     justify-content: center;
+  }
+  
+  .post-body .post-content {
+    max-width: 100%;
+    margin: 0 auto;
+  }
+  
+  .post-toc {
+    display: none;
   }
 }
 
 /* ========================================
-   9. TOC Styles - Hugo Compatible (H1-H4)
+   9. TOC Styles
    ======================================== */
-/* TOC Title - Fixed at top */
+
 .toc-header {
-  margin-bottom: 0.75rem;
-  padding-bottom: 0.5rem;
+  margin-bottom: var(--space-sm);
+  padding-bottom: var(--space-sm);
   border-bottom: 1px solid var(--glass-border);
   flex-shrink: 0;
 }
 
-
 .toc-title {
-  font-size: 0.95rem;
+  font-size: var(--text-base);
   font-weight: 600;
   color: var(--text-primary);
 }
-/* TOC Content Area - Scrollable */
+
 .toc-content {
   overflow-y: auto;
   overflow-x: hidden;
@@ -164,88 +197,88 @@
   margin-right: -0.5rem;
   padding-right: 0.5rem;
 }
-/* Styled Scrollbar */
+
 .toc-content::-webkit-scrollbar {
   width: 4px;
 }
+
 .toc-content::-webkit-scrollbar-track {
   background: transparent;
 }
+
 .toc-content::-webkit-scrollbar-thumb {
   background: var(--glass-border);
   border-radius: 2px;
 }
+
 .toc-content::-webkit-scrollbar-thumb:hover {
   background: var(--text-tertiary);
 }
-/* Firefox Scrollbar */
+
 .toc-content {
   scrollbar-width: thin;
   scrollbar-color: var(--glass-border) transparent;
 }
-/* TOC List Base Styles */
+
 .toc-content ul {
   list-style: none;
   padding: 0;
   margin: 0;
 }
-/* All nested lists */
+
 .toc-content ul ul {
-  padding-left: 1rem;
+  padding-left: var(--space-md);
   margin-top: 0.25rem;
 }
-/* TOC List Item */
+
 .toc-content li {
   margin: 0.35rem 0;
-  line-height: 1.5;
+  line-height: var(--leading-normal);
 }
-/* TOC Link Base Styles */
+
 .toc-content a {
   text-decoration: none;
   color: var(--text-secondary);
-  transition: all 0.2s ease;
+  transition: all var(--transition-fast);
   display: block;
   padding: 0.15rem 0;
-  font-size: 0.85rem;
-  border-radius: 4px;
+  font-size: var(--text-sm);
+  border-radius: var(--radius-sm);
 }
+
 .toc-content a:hover {
   color: var(--accent-color);
   padding-left: 0.25rem;
 }
-/* Highlight currently reading TOC item */
+
 .toc-content a.active {
   color: var(--accent-color);
   font-weight: 500;
   padding-left: 0.25rem;
 }
-/* H1 - Top level, boldest */
+
 .toc-content > nav > ul > li > a {
   font-weight: 600;
   color: var(--text-primary);
-  font-size: 0.9rem;
+  font-size: var(--text-sm);
 }
-/* H2 - Second level */
+
 .toc-content > nav > ul > li > ul > li > a {
   font-weight: 500;
   color: var(--text-secondary);
-  font-size: 0.85rem;
+  font-size: var(--text-sm);
 }
-/* H3 - Third level */
+
 .toc-content > nav > ul > li > ul > li > ul > li > a {
   font-weight: 400;
   color: var(--text-tertiary);
-  font-size: 0.8rem;
+  font-size: var(--text-xs);
 }
-/* H4 - Deepest level */
+
 .toc-content > nav > ul > li > ul > li > ul > li > ul > li > a {
   font-weight: 400;
   color: var(--text-muted);
-  font-size: 0.75rem;
-}
-/* Hover for all levels */
-.toc-content a:hover {
-  color: var(--accent-color);
+  font-size: var(--text-xs);
 }
 
 /* ========================================
@@ -254,17 +287,25 @@
 
 .post-content blockquote {
   position: relative;
-  margin: 2rem 0;
-  padding: 1.5rem 2rem;
+  margin: var(--space-xl) 0;
+  padding: var(--space-lg) var(--space-xl);
   background: var(--glass-bg);
   backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-lg);
   border-left: 4px solid var(--accent-color);
   color: var(--text-secondary);
   font-style: italic;
-  line-height: 1.8;
-  transition: all 0.3s ease;
+  line-height: var(--leading-relaxed);
+  transition: all var(--transition-normal);
+}
+
+@media (max-width: 767px) {
+  .post-content blockquote {
+    padding: var(--space-md) var(--space-lg);
+    margin: var(--space-lg) 0;
+  }
 }
 
 .post-content blockquote::before {
@@ -272,7 +313,7 @@
   position: absolute;
   top: 0.5rem;
   left: 1rem;
-  font-size: 4rem;
+  font-size: 3rem;
   color: var(--accent-color);
   opacity: 0.3;
   font-family: Georgia, serif;
@@ -285,7 +326,7 @@
   position: absolute;
   bottom: 0.5rem;
   right: 1rem;
-  font-size: 4rem;
+  font-size: 3rem;
   color: var(--accent-color);
   opacity: 0.3;
   font-family: Georgia, serif;
@@ -306,10 +347,9 @@
 }
 
 .post-content blockquote p:not(:last-child) {
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-md);
 }
 
-/* Links inside blockquote */
 .post-content blockquote a {
   color: var(--accent-hover);
   border-bottom: 1px dashed var(--accent-color);
@@ -319,34 +359,30 @@
   border-bottom-style: solid;
 }
 
-/* Code inside blockquote */
 .post-content blockquote code {
   background: rgba(139, 92, 246, 0.15);
   color: var(--accent-hover);
   padding: 0.2rem 0.4rem;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   font-size: 0.9em;
 }
 
-/* Emphasis inside blockquote */
 .post-content blockquote strong {
   color: var(--text-primary);
   font-weight: 600;
 }
 
-/* Nested blockquote */
 .post-content blockquote blockquote {
-  margin: 1rem 0;
+  margin: var(--space-md) 0;
   background: rgba(139, 92, 246, 0.05);
   border-left-width: 2px;
 }
 
-/* Citation/Attribution */
 .post-content blockquote cite,
 .post-content blockquote footer {
   display: block;
-  margin-top: 1rem;
-  font-size: 0.9rem;
+  margin-top: var(--space-md);
+  font-size: var(--text-sm);
   color: var(--text-tertiary);
   font-style: normal;
 }

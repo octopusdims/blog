@@ -3,29 +3,42 @@
   margin: var(--space-2xl) 0;
   background: var(--glass-bg);
   backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-xl);
   overflow: hidden;
   box-shadow: var(--glass-shadow);
 }
 
+@media (max-width: 767px) {
+  .tabs {
+    margin: var(--space-xl) 0;
+    border-radius: var(--radius-lg);
+  }
+}
+
+/* Tab Navigation - Horizontal scroll on mobile */
 .nav-tabs {
   display: flex;
   border-bottom: 1px solid var(--border-color);
   background: rgba(255, 255, 255, 0.03);
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   padding: var(--space-sm);
   gap: var(--space-xs);
+  /* Hide scrollbar but keep functionality */
+  -ms-overflow-style: none;
 }
 
 .nav-tabs::-webkit-scrollbar {
   display: none;
 }
 
+/* Individual Tab Button */
 .nav-tabs .tab {
   padding: var(--space-md) var(--space-xl);
-  font-size: 0.9375rem;
+  font-size: var(--text-sm);
   font-weight: 600;
   color: var(--text-secondary);
   background: transparent;
@@ -34,6 +47,25 @@
   cursor: pointer;
   white-space: nowrap;
   transition: all var(--transition-fast);
+  /* Touch target size */
+  min-height: var(--touch-target-min);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 767px) {
+  .nav-tabs .tab {
+    padding: var(--space-sm) var(--space-lg);
+    font-size: var(--text-sm);
+  }
+}
+
+/* Touch device optimization */
+@media (pointer: coarse) {
+  .nav-tabs .tab {
+    padding: var(--space-md) var(--space-xl);
+  }
 }
 
 .nav-tabs .tab:hover {
@@ -47,8 +79,15 @@
   box-shadow: var(--shadow-sm);
 }
 
+/* Tab Content Area */
 .tab-contents {
   padding: var(--space-xl);
+}
+
+@media (max-width: 767px) {
+  .tab-contents {
+    padding: var(--space-lg);
+  }
 }
 
 .tab-item-content {
@@ -71,10 +110,70 @@
   }
 }
 
+/* Content spacing */
 .tab-item-content > *:first-child {
   margin-top: 0;
 }
 
 .tab-item-content > *:last-child {
   margin-bottom: 0;
+}
+
+/* Tables inside tabs - ensure responsive */
+.tab-item-content .table-wrapper {
+  margin-left: calc(-1 * var(--space-lg));
+  margin-right: calc(-1 * var(--space-lg));
+  border-radius: 0;
+  border-left: none;
+  border-right: none;
+}
+
+@media (max-width: 767px) {
+  .tab-item-content .table-wrapper {
+    margin-left: calc(-1 * var(--space-md));
+    margin-right: calc(-1 * var(--space-md));
+  }
+}
+
+/* Code blocks inside tabs */
+.tab-item-content .code-wrapper {
+  margin-left: calc(-1 * var(--space-lg));
+  margin-right: calc(-1 * var(--space-lg));
+  border-radius: 0;
+}
+
+@media (max-width: 767px) {
+  .tab-item-content .code-wrapper {
+    margin-left: calc(-1 * var(--space-md));
+    margin-right: calc(-1 * var(--space-md));
+  }
+}
+
+/* Scroll hint for overflowing tabs */
+.nav-tabs::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 1px;
+  width: 30px;
+  background: linear-gradient(to right, transparent, rgba(30, 30, 35, 0.8));
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.nav-tabs.scrollable::after {
+  opacity: 1;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .tab-item-content.active {
+    animation: none;
+  }
+  
+  .nav-tabs .tab {
+    transition: none;
+  }
 }
