@@ -1,6 +1,6 @@
-baseURL = 'https://octopusdims.github.io'
+baseURL = 'https://example.com'
 languageCode = 'zh-CN'
-title = 'Hexo'
+title = 'DIMS'
 theme = 'liquid-hugo'
 [pagination]
   pagerSize = 6
@@ -56,19 +56,6 @@ enableGitInfo = false
       enable = false
       text = ""
       link = ""
-  
-  # Music Player (MetingJS)
-  [params.music]
-    enable = true
-    api = "https://beam-dana-illustrated-method.trycloudflare.com/api"
-    server = "netease"
-    type = "playlist"
-    id = "6016750085"
-    autoplay = false
-    fixed = true
-    mini = true
-    listFolded = true
-    order = "random"
 
 [menu]
   [[menu.main]]
@@ -83,6 +70,10 @@ enableGitInfo = false
     name = '相册'
     url = '/gallery'
     weight = 30
+  [[menu.main]]
+    name = '日志'
+    url = '/moments'
+    weight = 35
   [[menu.main]]
     name = '关于'
     url = '/about'

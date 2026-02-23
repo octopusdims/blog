@@ -1,5 +1,5 @@
 ---
-title: "归档"
+title: "Archives"
 date: 2025-01-01T00:00:00+08:00
 layout: archives
 ---

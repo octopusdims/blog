@@ -3,8 +3,10 @@
   <div class="container">
     <header class="page-header">
       <div class="page-icon kaomoji">(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧</div>
-      <h1 class="page-title">{{ .Title }}</h1>
-      <p class="page-subtitle">{{ .Params.subtitle | default "记录美好瞬间" }}</p>
+      <div class="gallery-title-glass" data-liquid-glass="page-title">
+        <h1 class="page-title">Gallery</h1>
+      </div>
+      <p class="page-subtitle">{{ .Params.subtitle | default "Record beautiful moments" }}</p>
     </header>
     
     <div class="gallery-grid">
@@ -26,12 +28,11 @@
           </div>
         {{ end }}
       {{ else if .Content }}
-        {{/* 允许通过 Markdown 内容创建相册 */}}
         {{ .Content }}
       {{ else }}
         <div class="gallery-empty">
-          <p>暂无相册内容</p>
-          <p class="gallery-hint">在 <code>data/gallery.yml</code> 中添加相册数据</p>
+          <p>No gallery content</p>
+          <p class="gallery-hint">Add data in <code>data/gallery.yml</code></p>
         </div>
       {{ end }}
     </div>

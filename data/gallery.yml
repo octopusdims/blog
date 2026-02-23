@@ -1,8 +1,12 @@
 # Gallery data file
 # Add your gallery items here
 
-# Example:
-# - title: "示例图片"
-#   src: "/images/gallery/photo1.jpg"
-#   thumb: "/images/gallery/photo1-thumb.jpg"
-#   desc: "这是一张示例图片的描述"
+- title: "Ray Tracing In One Weekend"
+  src: "/images/gallery/RayTracingInOneWeekend.png"
+  thumb: "/images/gallery/RayTracingInOneWeekend.png"
+  desc: "RayTracing三部曲第一部"
+
+- title: "Ray Tracing Next Week"
+  src: "/images/gallery/Next_Week.png"
+  thumb: "/images/gallery/Next_Week.png"
+  desc: "RayTracing三部曲第二部"

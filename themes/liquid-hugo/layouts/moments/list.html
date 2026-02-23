@@ -1,0 +1,85 @@
+{{ define "main" }}
+<div class="page-moments">
+  <div class="container">
+    <header class="page-header">
+      <div class="page-icon kaomoji">(ノ*°▽°*)</div>
+      <div class="moments-title-glass" data-liquid-glass="page-title">
+        <h1 class="page-title">{{ .Title }}</h1>
+      </div>
+      {{ with .Description }}
+        <p class="page-subtitle">{{ . }}</p>
+      {{ end }}
+    </header>
+    
+    <div class="moments-timeline">
+      {{ range .Pages.ByDate.Reverse }}
+        <article class="moment-card" data-liquid-glass="moment">
+          <div class="moment-header">
+            <div class="moment-meta">
+              <time class="moment-date" datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">
+                <span class="moment-date-day">{{ .Date.Format "02" }}</span>
+                <span class="moment-date-month">{{ .Date.Format "Jan" }}</span>
+                <span class="moment-date-time">{{ .Date.Format "15:04" }}</span>
+              </time>
+              {{ with .Params.mood }}
+                <span class="moment-mood">{{ . }}</span>
+              {{ end }}
+            </div>
+            <div class="moment-type-badge" data-type="{{ .Params.type | default "text" }}">
+              {{ if eq .Params.type "music" }}
+                <span>(♪◡♪)</span>
+              {{ else }}
+                <span>(◕‿◕)</span>
+              {{ end }}
+            </div>
+          </div>
+          
+          <div class="moment-content">
+            {{ if eq .Params.type "music" }}
+              {{ with .Params.music }}
+                <div class="moment-music">
+                  {{ with .cover }}
+                    <div class="music-cover">
+                      <img src="{{ . }}" alt="{{ $.Params.music.title }}">
+                      <div class="music-play-icon">▶</div>
+                    </div>
+                  {{ end }}
+                  <div class="music-info">
+                    <div class="music-title">{{ .title }}</div>
+                    <div class="music-artist">{{ .artist }}</div>
+                    {{ with .link }}
+                      <a href="{{ . }}" target="_blank" rel="noopener" class="music-link">
+                        <span>去听歌</span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M7 17L17 7M17 7H7M17 7V17"/>
+                        </svg>
+                      </a>
+                    {{ end }}
+                  </div>
+                </div>
+              {{ end }}
+            {{ end }}
+            
+            <div class="moment-text">
+              {{ .Content }}
+            </div>
+          </div>
+        </article>
+      {{ end }}
+    </div>
+    
+    {{ if gt (len .Pages) 0 }}
+      <div class="moments-end">
+        <span class="moments-end-dot"></span>
+        <span class="moments-end-text">已展示全部日志</span>
+        <span class="moments-end-dot"></span>
+      </div>
+    {{ else }}
+      <div class="moments-empty">
+        <div class="moments-empty-icon">(｡•́︿•̀｡)</div>
+        <p>还没有日志，去写点什么吧～</p>
+      </div>
+    {{ end }}
+  </div>
+</div>
+{{ end }}

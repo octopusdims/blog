@@ -8,15 +8,50 @@
   margin-bottom: var(--space-3xl);
 }
 
-.page-title {
+/* Gallery Title - Liquid Glass with Text Mask (Same as Archive) */
+.gallery-title-glass {
+  position: relative;
+  display: inline-block;
+  width: 200px;
+  height: 80px;
+  margin-bottom: var(--space-sm);
+  filter: drop-shadow(0 0 50px rgba(167, 139, 250, 0.6));
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 80'%3E%3Ctext x='50%25' y='60%25' dominant-baseline='middle' text-anchor='middle' font-size='56' font-weight='800' font-family='Inter, system-ui, -apple-system, sans-serif' fill='white' style='letter-spacing: -0.03em;'%3EGallery%3C/text%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 80'%3E%3Ctext x='50%25' y='60%25' dominant-baseline='middle' text-anchor='middle' font-size='56' font-weight='800' font-family='Inter, system-ui, -apple-system, sans-serif' fill='white' style='letter-spacing: -0.03em;'%3EGallery%3C/text%3E%3C/svg%3E");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  animation: gallery-title-float 4s ease-in-out infinite;
+}
+
+@keyframes gallery-title-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.gallery-title-glass .liquid-glass-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Hide the original text, show glass instead */
+.gallery-title-glass .page-title {
+  position: relative;
+  z-index: 1;
+  opacity: 0 !important;
   font-size: 3rem;
   font-weight: 800;
-  margin-bottom: var(--space-sm);
   letter-spacing: -0.03em;
-  background: var(--accent-gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  margin: 0;
+  white-space: nowrap;
+  background: none !important;
+  -webkit-text-fill-color: transparent !important;
 }
 
 .page-subtitle {
@@ -134,8 +169,18 @@
 
 /* Responsive */
 @media (max-width: 768px) {
-  .page-title {
+  .gallery-title-glass {
+    width: 150px;
+    height: 60px;
+    filter: drop-shadow(0 0 40px rgba(167, 139, 250, 0.5));
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 150 60'%3E%3Ctext x='50%25' y='60%25' dominant-baseline='middle' text-anchor='middle' font-size='42' font-weight='800' font-family='Inter, system-ui, -apple-system, sans-serif' fill='white' style='letter-spacing: -0.03em;'%3EGallery%3C/text%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 150 60'%3E%3Ctext x='50%25' y='60%25' dominant-baseline='middle' text-anchor='middle' font-size='42' font-weight='800' font-family='Inter, system-ui, -apple-system, sans-serif' fill='white' style='letter-spacing: -0.03em;'%3EGallery%3C/text%3E%3C/svg%3E");
+  }
+  
+  .gallery-title-glass .page-title {
     font-size: 2.25rem;
+    opacity: 0 !important;
+    background: none !important;
   }
   
   .gallery-grid {

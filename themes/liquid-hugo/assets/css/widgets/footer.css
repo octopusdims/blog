@@ -3,8 +3,7 @@
   position: relative;
   padding: var(--space-3xl) 0;
   margin: var(--space-xl) auto 0;
-  width: 92%;
-  max-width: 1400px;
+  width: 90%;
   min-height: 120px;
   background: transparent;
   backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
