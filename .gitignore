@@ -1,0 +1,28 @@
+# Hugo
+public/
+resources/_gen/
+assets/jsconfig.json
+.hugo_build.lock
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+
+# Dependencies
+node_modules/

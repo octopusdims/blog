@@ -1,4 +1,4 @@
-baseURL = 'https://example.com'
+baseURL = 'https://octopusdims.github.io/'
 languageCode = 'zh-CN'
 title = 'DIMS'
 theme = 'liquid-hugo'
