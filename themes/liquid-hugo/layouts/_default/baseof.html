@@ -42,6 +42,7 @@
     <script defer src="{{ .Site.Params.katex.cdn }}katex.min.js"></script>
     <script defer src="{{ .Site.Params.katex.cdn }}contrib/auto-render.min.js"></script>
   {{ end }}
+  
 </head>
 <body class="{{ if .IsHome }}is-home{{ end }}{{ if eq .Type "posts" }} is-post{{ end }}{{ if .Params.cover }} has-cover{{ end }}">
   {{ partial "floating-shapes.html" . }}
@@ -111,5 +112,7 @@
       });
     </script>
   {{ end }}
+  
+
 </body>
 </html>

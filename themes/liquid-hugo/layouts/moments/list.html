@@ -37,26 +37,13 @@
           <div class="moment-content">
             {{ if eq .Params.type "music" }}
               {{ with .Params.music }}
-                <div class="moment-music">
-                  {{ with .cover }}
-                    <div class="music-cover">
-                      <img src="{{ . }}" alt="{{ $.Params.music.title }}">
-                      <div class="music-play-icon">▶</div>
-                    </div>
-                  {{ end }}
-                  <div class="music-info">
-                    <div class="music-title">{{ .title }}</div>
-                    <div class="music-artist">{{ .artist }}</div>
-                    {{ with .link }}
-                      <a href="{{ . }}" target="_blank" rel="noopener" class="music-link">
-                        <span>去听歌</span>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                          <path d="M7 17L17 7M17 7H7M17 7V17"/>
-                        </svg>
-                      </a>
-                    {{ end }}
-                  </div>
-                </div>
+                {{ partial "music-player.html" (dict 
+                  "id" $.File.UniqueID
+                  "title" .title 
+                  "artist" .artist 
+                  "src" .src 
+                  "cover" .cover
+                ) }}
               {{ end }}
             {{ end }}
             
@@ -82,4 +69,5 @@
     {{ end }}
   </div>
 </div>
+
 {{ end }}

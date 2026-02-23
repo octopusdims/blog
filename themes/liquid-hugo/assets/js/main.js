@@ -793,4 +793,195 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   })();
+  
+  // ===== Glass Music Player =====
+  (function initGlassMusicPlayer() {
+    const players = document.querySelectorAll('.glass-music-player');
+    if (!players.length) return;
+    
+    // Track which player is currently playing
+    let currentPlayingPlayer = null;
+    
+    players.forEach(function(player) {
+      const audio = player.querySelector('.audio-element');
+      const playBtn = player.querySelector('.play-btn');
+      const progressBar = player.querySelector('.progress-bar');
+      const progressFill = player.querySelector('.progress-fill');
+      const progressHandle = player.querySelector('.progress-handle');
+      const currentTimeEl = player.querySelector('.current-time');
+      const durationEl = player.querySelector('.duration');
+      const volumeBtn = player.querySelector('.volume-btn');
+      const volumeBar = player.querySelector('.volume-bar');
+      const volumeFill = player.querySelector('.volume-fill');
+      
+      if (!audio) return;
+      
+      // Format time helper
+      function formatTime(seconds) {
+        if (isNaN(seconds)) return '0:00';
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return mins + ':' + (secs < 10 ? '0' : '') + secs;
+      }
+      
+      // Play/Pause toggle
+      playBtn.addEventListener('click', function() {
+        if (audio.paused) {
+          // Pause other players
+          if (currentPlayingPlayer && currentPlayingPlayer !== audio) {
+            currentPlayingPlayer.pause();
+            const otherPlayer = currentPlayingPlayer.closest('.glass-music-player');
+            if (otherPlayer) otherPlayer.classList.remove('is-playing');
+          }
+          
+          audio.play();
+          player.classList.add('is-playing');
+          currentPlayingPlayer = audio;
+        } else {
+          audio.pause();
+          player.classList.remove('is-playing');
+          if (currentPlayingPlayer === audio) currentPlayingPlayer = null;
+        }
+      });
+      
+      // Audio events
+      // Set duration when metadata is loaded
+      function updateDuration() {
+        if (audio.duration && !isNaN(audio.duration) && audio.duration !== Infinity) {
+          durationEl.textContent = formatTime(audio.duration);
+        }
+      }
+      
+      // Try to get duration immediately (might already be cached/loaded)
+      if (audio.readyState >= 1) {
+        updateDuration();
+      }
+      
+      // Also try after a short delay as fallback
+      setTimeout(updateDuration, 100);
+      setTimeout(updateDuration, 500);
+      
+      // Listen for multiple events to ensure we get the duration
+      audio.addEventListener('loadedmetadata', updateDuration);
+      audio.addEventListener('durationchange', updateDuration);
+      audio.addEventListener('canplay', updateDuration);
+      audio.addEventListener('loadeddata', updateDuration);
+      
+      audio.addEventListener('timeupdate', function() {
+        const progress = (audio.currentTime / audio.duration) * 100;
+        progressFill.style.width = progress + '%';
+        progressHandle.style.left = progress + '%';
+        currentTimeEl.textContent = formatTime(audio.currentTime);
+      });
+      
+      audio.addEventListener('ended', function() {
+        player.classList.remove('is-playing');
+        progressFill.style.width = '0%';
+        progressHandle.style.left = '0%';
+        currentTimeEl.textContent = '0:00';
+        if (currentPlayingPlayer === audio) currentPlayingPlayer = null;
+      });
+      
+      audio.addEventListener('waiting', function() {
+        player.classList.add('is-loading');
+      });
+      
+      audio.addEventListener('playing', function() {
+        player.classList.remove('is-loading');
+      });
+      
+      audio.addEventListener('error', function() {
+        player.classList.remove('is-loading');
+        player.classList.add('has-error');
+        player.classList.remove('is-playing');
+        console.error('Audio load error:', audio.src);
+      });
+      
+      // Progress bar interaction
+      let isDragging = false;
+      
+      function updateProgress(e) {
+        const rect = progressBar.getBoundingClientRect();
+        const x = (e.clientX || e.touches[0].clientX) - rect.left;
+        const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
+        progressFill.style.width = percentage + '%';
+        progressHandle.style.left = percentage + '%';
+        if (audio.duration) {
+          audio.currentTime = (percentage / 100) * audio.duration;
+        }
+      }
+      
+      progressBar.addEventListener('click', updateProgress);
+      
+      progressBar.addEventListener('mousedown', function(e) {
+        isDragging = true;
+        updateProgress(e);
+      });
+      
+      progressBar.addEventListener('touchstart', function(e) {
+        isDragging = true;
+        updateProgress(e);
+      }, { passive: true });
+      
+      document.addEventListener('mousemove', function(e) {
+        if (isDragging) updateProgress(e);
+      });
+      
+      document.addEventListener('touchmove', function(e) {
+        if (isDragging) updateProgress(e);
+      }, { passive: true });
+      
+      document.addEventListener('mouseup', function() {
+        isDragging = false;
+      });
+      
+      document.addEventListener('touchend', function() {
+        isDragging = false;
+      });
+      
+      // Volume control
+      volumeBtn.addEventListener('click', function() {
+        audio.muted = !audio.muted;
+        volumeBtn.classList.toggle('is-muted', audio.muted);
+      });
+      
+      function updateVolume(e) {
+        const rect = volumeBar.getBoundingClientRect();
+        const x = (e.clientX || e.touches[0].clientX) - rect.left;
+        const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
+        audio.volume = percentage / 100;
+        volumeFill.style.width = percentage + '%';
+        audio.muted = false;
+        volumeBtn.classList.remove('is-muted');
+      }
+      
+      volumeBar.addEventListener('click', updateVolume);
+      
+      volumeBar.addEventListener('mousedown', function(e) {
+        e.stopPropagation();
+        const onMove = function(e) { updateVolume(e); };
+        const onUp = function() {
+          document.removeEventListener('mousemove', onMove);
+          document.removeEventListener('mouseup', onUp);
+        };
+        document.addEventListener('mousemove', onMove);
+        document.addEventListener('mouseup', onUp);
+      });
+      
+      volumeBar.addEventListener('touchstart', function(e) {
+        e.stopPropagation();
+        const onMove = function(e) { updateVolume(e); };
+        const onUp = function() {
+          document.removeEventListener('touchmove', onMove);
+          document.removeEventListener('touchend', onUp);
+        };
+        document.addEventListener('touchmove', onMove, { passive: true });
+        document.addEventListener('touchend', onUp);
+      }, { passive: true });
+      
+      // Set initial volume
+      audio.volume = 0.7;
+      volumeFill.style.width = '70%';
+    });
+  })();
 });
