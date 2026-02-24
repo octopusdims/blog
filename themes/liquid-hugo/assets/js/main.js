@@ -987,7 +987,10 @@ document.addEventListener('DOMContentLoaded', function() {
       });
       
       audio.addEventListener('waiting', function() {
-        player.classList.add('is-loading');
+        // Only show loading state if audio is not paused
+        if (!audio.paused) {
+          player.classList.add('is-loading');
+        }
       });
       
       audio.addEventListener('playing', function() {
