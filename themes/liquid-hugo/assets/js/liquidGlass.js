@@ -394,17 +394,17 @@
     const presets = {
       header: {
         baseColor: [0.13, 0.14, 0.18], // Lighter blue-purple
-        cornerRadius: 36.0,
+        cornerRadius: 32.0,
         responsive: true
       },
       card: {
         baseColor: [0.14, 0.15, 0.19], // Lighter blue-purple
-        cornerRadius: 36.0,
+        cornerRadius: 32.0,
         responsive: true // Enable responsive radius for cards
       },
       footer: {
         baseColor: [0.12, 0.13, 0.17], // Lighter blue-purple
-        cornerRadius: 36.0,
+        cornerRadius: 32.0,
         responsive: true
       },
       'error-code': {
@@ -437,7 +437,7 @@
       },
       moment: {
         baseColor: [0.14, 0.15, 0.19], // Same as card
-        cornerRadius: 36.0,
+        cornerRadius: 32.0,
         responsive: true
       }
     };
@@ -449,7 +449,8 @@
     function updateCornerRadius() {
       if (config.responsive) {
         const isMobile = window.innerWidth <= 767;
-        config.cornerRadius = isMobile ? preset.cornerRadius * 0.75 : preset.cornerRadius;
+        // Mobile: 24px (matches CSS), Desktop: 32px (matches CSS)
+        config.cornerRadius = isMobile ? 24.0 : preset.cornerRadius;
       }
     }
     updateCornerRadius();
